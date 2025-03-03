@@ -5,6 +5,9 @@ if [ "$1" = "compile" ];then
     make obj-intel64/$2.so
 fi
 
+BINPRE_PATH=$(dirname $(dirname $(readlink -f $0)))
+export PATH=$BINPRE_PATH/pin-3.28-98749-g6643ecee5-gcc-linux:$PATH
+
 if [ "$1" = "run" ];then
     LD_PRELOAD=./libx.so pin -t obj-intel64/$2.so -- $3 ${@:4}
 fi

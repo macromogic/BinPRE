@@ -150,7 +150,7 @@ def SendInputMsg():
         port = 4999
         config.port = port
         port = 20000
-    elif proto == "eip":
+    elif proto == "eip" or proto == "cip":
         data = eip
         port = 44818
         config.port = port
@@ -180,6 +180,10 @@ def SendInputMsg():
         port = 80
         config.port = port
         data = http
+    elif proto == "smb":
+        port = 445
+        config.port = port
+        data = []
     elif proto =="unknown":
         port = config.port
     
@@ -229,7 +233,7 @@ def SendInputMsg():
             baseline_mode = "all"
             
         for i in range(index):
-            new_directory = f"../PUT_test/{i}_tmp_results"
+            new_directory = f"../PUT_test/{config.protocol_name}/{i}_tmp_results"
             remove_analysis(new_directory)
 
     print(payload_message)
@@ -338,7 +342,7 @@ def SendInputMsg():
         
         print("Please wait, processing files...")
         for i in range(index):
-            new_directory = f"../PUT_test/{i}_tmp_results"
+            new_directory = f"../PUT_test/{config.protocol_name}/{i}_tmp_results"
             config.reset_directory(new_directory)
             shutil.move(f'../PUT_test/tmp_results/info_{i}.txt', new_directory + '/info.txt')
             shutil.move(f'../PUT_test/tmp_results/format_{i}.txt', new_directory + '/format.txt')
@@ -392,7 +396,7 @@ def MonitorAnalysis(index: int, payload_message:list):
     #Analysis every msg sample
     for i in range(index):
         print("\n\n+++++++++++++++++++++++ Msg {} +++++++++++++++++++++++".format(i))
-        new_directory = f"../PUT_test/{i}_tmp_results/"
+        new_directory = f"../PUT_test/{config.protocol_name}/{i}_tmp_results/"
         with open(new_directory + "format.txt", 'r') as f:
             lines = f.readlines()
         matching_lines = [line for line in lines if re.match("^\[Message\].*", line)]

@@ -109,9 +109,9 @@ def wait_connect(ip, port, isUDP):
 def reset_directory(directory_path):
     if os.path.exists(directory_path):
         shutil.rmtree(directory_path)
-        os.mkdir(directory_path)
+        os.makedirs(directory_path, exist_ok=True)
     else:
-        os.mkdir(directory_path)
+        os.makedirs(directory_path, exist_ok=True)
 
 def reset_file(file_path):
     with open(file_path, "w") as file:
