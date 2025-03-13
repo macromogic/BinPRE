@@ -1,5 +1,5 @@
 
-semantic_Types = ['Static', 'Group', 'String', 'Bit Field', 'Bytes']
+semantic_Types = ['Static', 'Group', 'String', 'Integer', 'Bytes']
 semantic_Functions = ['Command', 'Length', 'Delim', 'CheckSum', 'Aligned', 'Filename']
 
 

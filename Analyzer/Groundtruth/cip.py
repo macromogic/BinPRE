@@ -1,4 +1,4 @@
-from .enums import SemanticType, SemanticFunction
+from .common import SemanticType, SemanticFunction
 
 __all__ = [
     'cip_Syntax_Groundtruth',
@@ -13,14 +13,14 @@ _syntax_groundtruth = [
 ]
 
 _semantic_groundtruth = {
-    '0': SemanticType.BitField, # [7:4] Version; [3:0] Header length
-    '1': SemanticType.BitField, # Service
-    '2,3': SemanticType.BitField, # Total length
+    '0': SemanticType.Integer, # [7:4] Version; [3:0] Header length
+    '1': SemanticType.Integer, # Service
+    '2,3': SemanticType.Integer, # Total length
     '4,5': SemanticType.Static, # Identification
-    '6,7': SemanticType.BitField, # [15:13] Flags; [12:0] Fragment offset
-    '8': SemanticType.BitField, # TTL
+    '6,7': SemanticType.Integer, # [15:13] Flags; [12:0] Fragment offset
+    '8': SemanticType.Integer, # TTL
     '9': SemanticType.Static, # Protocol
-    '10,11': SemanticType.BitField, # Header checksum
+    '10,11': SemanticType.Integer, # Header checksum
     '12,15': SemanticType.Bytes, # Source IP
     '16,19': SemanticType.Bytes, # Destination IP
 }
@@ -44,3 +44,6 @@ cip_Semantic_Functions_Groundtruth = {
     i: _semantic_functions_groundtruth
     for i in range(50)
 }
+
+cip_commandOffset = '1'
+cip_lengthOffset = '2,3'

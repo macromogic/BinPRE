@@ -49,6 +49,10 @@ def process_packet(packet, targetport):
             app_data = packet[Raw].load
             message = Message(ip_src, ip_dst, srcport, destport, app_data)
             return message
+        elif packet.dport == targetport:
+            app_data = packet[TCP].payload.build()
+            message = Message(ip_src, ip_dst, srcport, destport, app_data)
+            return message
         
     elif IP in packet and UDP in packet:  #UDP
         ip_src = packet[IP].src
@@ -180,7 +184,7 @@ def SendInputMsg():
         port = 80
         config.port = port
         data = http
-    elif proto == "smb":
+    elif proto == "smb2":
         port = 445
         config.port = port
         data = []

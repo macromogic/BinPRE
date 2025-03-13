@@ -4,3 +4,4 @@ from .modbus import modbus_commandOffset
 from .modbus import modbus_lengthOffset
 from .modbus import modbus_Semantic_Functions_Groundtruth
 from .cip import *
+from .smb2 import *
