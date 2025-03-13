@@ -107,7 +107,7 @@ class Field:
                    SemanticFunction.Command)
 
 
-def __parse_packet_impl(
+def _parse_packet_impl(
         fields: List[Field],
         last_offset: int = -1,
         vlen: Optional[List[int]] = None,
@@ -160,7 +160,7 @@ class Packet:
             syntax,
             semantic,
             functions
-        ) = __parse_packet_impl(
+        ) = _parse_packet_impl(
             self.fields,
             vlen=vlen,
             vfields=vfields
