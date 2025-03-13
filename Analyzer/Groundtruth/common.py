@@ -1,5 +1,6 @@
 from enum import Enum
 from dataclasses import dataclass
+from typing import Optional
 
 class SemanticType(str, Enum):
     Static = 'Static'
@@ -20,8 +21,8 @@ class SemanticFunction(str, Enum):
 @dataclass
 class Field:
     width: int
-    typ: SemanticType | None
-    fun: SemanticFunction | None
+    typ: Optional[SemanticType]
+    fun: Optional[SemanticFunction]
 
     def position(self, offset: int) -> str:
         start_offset = offset + 1
@@ -37,35 +38,35 @@ class Field:
     @classmethod
     def static(cls,
                length: int,
-               fn: SemanticFunction | None = None
+               fn: Optional[SemanticFunction] = None
     ) -> 'Field':
         return cls(length, SemanticType.Static, fn)
 
     @classmethod
     def group(cls,
               length: int,
-              fn: SemanticFunction | None = None
+              fn: Optional[SemanticFunction] = None
     ) -> 'Field':
         return cls(length, SemanticType.Group, fn)
 
     @classmethod
     def string(cls,
               length: int,
-              fn: SemanticFunction | None = None
+              fn: Optional[SemanticFunction] = None
     ) -> 'Field':
         return cls(length, SemanticType.String, fn)
 
     @classmethod
     def integer(cls,
               length: int,
-              fn: SemanticFunction | None = None
+              fn: Optional[SemanticFunction] = None
     ) -> 'Field':
         return cls(length, SemanticType.Integer, fn)
 
     @classmethod
     def bytes(cls,
               length: int,
-              fn: SemanticFunction | None = None
+              fn: Optional[SemanticFunction] = None
     ) -> 'Field':
         return cls(length, SemanticType.Bytes, fn)
 
@@ -109,8 +110,8 @@ class Field:
 def __parse_packet_impl(
         fields: list[Field],
         last_offset: int = -1,
-        vlen: list[int] | None = None,
-        vfields: list[list[Field]] | None = None
+        vlen: Optional[list[int]] = None,
+        vfields: Optional[list[list[Field]]] = None
 ) -> tuple[list[int], dict[str, str], dict[str, str]]:
     syntax = []
     semantic = {}
@@ -152,7 +153,7 @@ class Packet:
         self.fields += fields
 
     def parse(self,
-              vlen: list[int] | None = None,
+              vlen: Optional[list[int]] = None,
               *vfields: list[Field]
     ) -> tuple[list[int], dict[str, str], dict[str, str]]:
         (
