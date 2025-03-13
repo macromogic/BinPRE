@@ -118,6 +118,8 @@ def reset_file(file_path):
         file.write("")
 
 def get_file_size(file_path):
+    if not os.path.exists(file_path):
+        reset_file(file_path)
     return os.path.getsize(file_path)
 
 
