@@ -117,6 +117,8 @@ def _parse_packet_impl(
     semantic = {}
     functions = {}
     vi = 0
+    if vlen is None:
+        vlen = []
     for field in fields:
         if field is Ellipsis:
             vfs = vfields[0]
@@ -162,7 +164,7 @@ class Packet:
             functions
         ) = _parse_packet_impl(
             self.fields,
-            vlen=vlen,
+            vlen=vlen or [],
             vfields=vfields
         )
 

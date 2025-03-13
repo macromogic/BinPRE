@@ -426,7 +426,7 @@ _vlens = {
 }
 
 _smb2_gt = {
-    i: p.parse(_vlens.get(i), *_vfields.get(i, []))
+    i: p.parse(_vlens.get(i), _vfields.get(i, []))
     for i, p in _smb2_packets.items()
 }
 
