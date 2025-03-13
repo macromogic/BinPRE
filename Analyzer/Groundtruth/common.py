@@ -120,7 +120,7 @@ def _parse_packet_impl(
     for field in fields:
         if field is Ellipsis:
             vfs = vfields[0]
-            syn, sem, fn = __parse_packet_impl(
+            syn, sem, fn = _parse_packet_impl(
                 vfs,
                 last_offset,
                 vlen[vi:],
