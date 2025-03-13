@@ -1,5 +1,5 @@
 from ..common import Field, Packet
-import srvsvc
+from . import srvsvc
 from enum import Enum
 
 __all__ = [
