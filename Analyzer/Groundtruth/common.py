@@ -1,6 +1,6 @@
 from enum import Enum
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List, Tuple, Dict
 
 class SemanticType(str, Enum):
     Static = 'Static'
@@ -108,11 +108,11 @@ class Field:
 
 
 def __parse_packet_impl(
-        fields: list[Field],
+        fields: List[Field],
         last_offset: int = -1,
-        vlen: Optional[list[int]] = None,
-        vfields: Optional[list[list[Field]]] = None
-) -> tuple[list[int], dict[str, str], dict[str, str]]:
+        vlen: Optional[List[int]] = None,
+        vfields: Optional[List[List[Field]]] = None
+) -> Tuple[List[int], Dict[str, str], Dict[str, str]]:
     syntax = []
     semantic = {}
     functions = {}
@@ -153,9 +153,9 @@ class Packet:
         self.fields += fields
 
     def parse(self,
-              vlen: Optional[list[int]] = None,
-              *vfields: list[Field]
-    ) -> tuple[list[int], dict[str, str], dict[str, str]]:
+              vlen: Optional[List[int]] = None,
+              *vfields: List[Field]
+    ) -> Tuple[List[int], Dict[str, str], Dict[str, str]]:
         (
             syntax,
             semantic,

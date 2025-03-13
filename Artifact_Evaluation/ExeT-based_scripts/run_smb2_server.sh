@@ -1,0 +1,1 @@
+smbd --foreground --no-process-group
