@@ -52,6 +52,30 @@ _smb2_common_headers = [
 ]
 
 _smb2_cmd_fields = {
+    _Cmd.NEGOTIATE: [
+        Field.length(2),  # Structure Size
+        Field.integer(2),  # Dialect Count
+        Field.integer(2),  # Security Mode
+        Field.static(2),  # Reserved
+        Field.integer(4),  # Capabilities
+        Field.integer(16),  # Client GUID
+        Field.integer(4),  # Negotiate Context Offset
+        Field.length(2),  # Negotiate Context Count
+        Field.static(2),  # Reserved
+        ...  # Dialects
+    ],
+    _Cmd.SESSION_SETUP: [
+        Field.length(2),  # Structure Size
+        Field.integer(1),  # Flags
+        Field.integer(1),  # Security Mode
+        Field.integer(4),  # Capabilities
+        Field.integer(4),  # Channel
+        Field.integer(2),  # Security Buffer Offset
+        Field.length(2),  # Security Buffer Length
+        Field.integer(4),  # Previous Session ID
+        ### SPNEGO Payload ###
+        Field.unknown(2650),
+    ],
     _Cmd.TREE_CONNECT: [
         Field.length(2),  # Structure Size
         Field.integer(2),  # Flags
@@ -191,6 +215,8 @@ _smb2_cmd_fields = {
 }
 
 _cmds = [
+    _Cmd.NEGOTIATE,
+    _Cmd.SESSION_SETUP,
     _Cmd.TREE_CONNECT,
     _Cmd.CREATE,
     _Cmd.GET_INFO,
@@ -246,25 +272,25 @@ _smb2_packets = {
     for i, c in enumerate(_cmds)
 }
 
-_smb2_packets[10].add_fields(
+_smb2_packets[12].add_fields(
     Field.unknown(8),
     *_smb2_common_headers,
     *_smb2_cmd_fields[_Cmd.GET_INFO],
 )
 
-_smb2_packets[17].add_fields(
+_smb2_packets[19].add_fields(
     *_smb2_common_headers,
     *_smb2_cmd_fields[_Cmd.NOTIFY],
 )
 
 
-_smb2_packets[20].add_fields(
+_smb2_packets[22].add_fields(
     Field.unknown(8),
     *_smb2_common_headers,
     *_smb2_cmd_fields[_Cmd.FIND],
 )
 
-_smb2_packets[28].add_fields(
+_smb2_packets[30].add_fields(
     Field.unknown(8),
     *_smb2_common_headers,
     *_smb2_cmd_fields[_Cmd.GET_INFO],
@@ -281,48 +307,34 @@ _create_common_fields = [
 ]
 
 _ioctl_payloads = {
-    5: srvsvc.srvsvc_netshareenumall_payload,
-    7: [Field.integer(2), Field.string(0)],
-    15: srvsvc.srvsvc_netsharegetinfo_payload,
-    26: [Field.unknown(14), Field.string(0)],
+    7: srvsvc.srvsvc_netshareenumall_payload,
+    9: [Field.integer(2), Field.string(0)],
+    17: srvsvc.srvsvc_netsharegetinfo_payload,
+    28: [Field.unknown(14), Field.string(0)],
 }
 
 _create_payloads = {
-    1: [
+    3: [
         Field.string(0)
-    ],
-    9: [
-        Field.unknown(8),
-        *_create_common_fields,
-        Field.integer(16),
-        *_create_common_fields,
-        *_create_common_fields,
     ],
     11: [
-        Field.string(0)
-    ],
-    17: [
         Field.unknown(8),
         *_create_common_fields,
         Field.integer(16),
         *_create_common_fields,
         *_create_common_fields,
     ],
-    18: [
-        Field.string(0),
-        Field.delim(2),
-        *_create_common_fields,
-        Field.integer(16),
-        *_create_common_fields,
-        *_create_common_fields,
+    13: [
+        Field.string(0)
     ],
     19: [
         Field.unknown(8),
         *_create_common_fields,
         Field.integer(16),
         *_create_common_fields,
+        *_create_common_fields,
     ],
-    21: [
+    20: [
         Field.string(0),
         Field.delim(2),
         *_create_common_fields,
@@ -330,21 +342,24 @@ _create_payloads = {
         *_create_common_fields,
         *_create_common_fields,
     ],
-    27: [
+    21: [
         Field.unknown(8),
         *_create_common_fields,
         Field.integer(16),
         *_create_common_fields,
     ],
-    32: [
+    23: [
         Field.string(0),
         Field.delim(2),
-        Field.unknown(4),
         *_create_common_fields,
         Field.integer(16),
         *_create_common_fields,
-        Field.integer(16),
         *_create_common_fields,
+    ],
+    29: [
+        Field.unknown(8),
+        *_create_common_fields,
+        Field.integer(16),
         *_create_common_fields,
     ],
     34: [
@@ -354,10 +369,14 @@ _create_payloads = {
         *_create_common_fields,
         Field.integer(16),
         *_create_common_fields,
+        Field.integer(16),
+        *_create_common_fields,
         *_create_common_fields,
     ],
     36: [
-        Field.unknown(8),
+        Field.string(0),
+        Field.delim(2),
+        Field.unknown(4),
         *_create_common_fields,
         Field.integer(16),
         *_create_common_fields,
@@ -370,7 +389,14 @@ _create_payloads = {
         *_create_common_fields,
         *_create_common_fields,
     ],
-    42: [
+    40: [
+        Field.unknown(8),
+        *_create_common_fields,
+        Field.integer(16),
+        *_create_common_fields,
+        *_create_common_fields,
+    ],
+    44: [
         Field.string(0),
         Field.delim(2),
         Field.unknown(4),
@@ -381,20 +407,20 @@ _create_payloads = {
         *_create_common_fields,
         *_create_common_fields,
     ],
-    43: [
-        Field.unknown(8),
-        *_create_common_fields,
-        Field.integer(16),
-        *_create_common_fields,
-        *_create_common_fields,
-    ],
     45: [
         Field.unknown(8),
         *_create_common_fields,
         Field.integer(16),
         *_create_common_fields,
+        *_create_common_fields,
     ],
     47: [
+        Field.unknown(8),
+        *_create_common_fields,
+        Field.integer(16),
+        *_create_common_fields,
+    ],
+    49: [
         Field.string(0),
         Field.delim(2),
         Field.unknown(4),
@@ -408,21 +434,21 @@ _create_payloads = {
 _vfields = {**_ioctl_payloads, **_create_payloads}
 
 _vlens = {
-    0: [34],
-    1: [12],
-    5: [26],
-    7: [48],
-    8: [48],
-    11: [12],
-    15: [22, 24],
-    18: [22],
-    20: [2],
-    21: [46],
-    26: [16],
-    32: [10],
+    2: [34],
+    3: [12],
+    7: [26],
+    9: [48],
+    10: [48],
+    13: [12],
+    17: [22, 24],
+    20: [22],
+    22: [2],
+    23: [46],
+    28: [16],
     34: [10],
-    42: [10],
-    47: [10],
+    36: [10],
+    44: [10],
+    49: [10],
 }
 
 _smb2_gt = {

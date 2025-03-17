@@ -4,3 +4,4 @@ __pycache__
 *.pcap
 !Analyzer/pcaps/*
 PUT_test/*
+*.bak
