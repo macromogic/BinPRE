@@ -1,31 +1,45 @@
-FROM homebrew/ubuntu20.04
+FROM python:3.10
 
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt install -y \
+build-essential make gcc g++ cmake \
+samba git vim net-tools wget tar
 
-# install BinPRE
+## BinPRE
 
-RUN cd ~ && \
-    git clone https://github.com/BinPRE/BinPRE && \
-    cd BinPRE && \
-    git checkout Artifact_Evaluation && \
-    sudo chmod 777 -R ./ && \
-    ./install_preliminary.sh
+WORKDIR /
+RUN git clone https://github.com/macromogic/BinPRE.git
+RUN pip install -r /BinPRE/requirements.txt
 
-# install pin (./install_pin.sh)
+## Pin
 
-RUN cd ~/BinPRE && \
-    wget https://software.intel.com/sites/landingpage/pintool/downloads/pin-3.28-98749-g6643ecee5-gcc-linux.tar.gz && \
-    tar -xzf pin-3.28-98749-g6643ecee5-gcc-linux.tar.gz && \
-    chmod 777 -R ./ && \
-    cd pin-3.28-98749-g6643ecee5-gcc-linux && \
-    sudo ln -s ${PWD}/pin /usr/local/bin 
+RUN wget https://software.intel.com/sites/landingpage/pintool/downloads/pin-3.28-98749-g6643ecee5-gcc-linux.tar.gz
+RUN tar -xzf pin-3.28-98749-g6643ecee5-gcc-linux.tar.gz
+ENV PATH="/pin-3.28-98749-g6643ecee5-gcc-linux:${PATH}"
 
+## SMB2
 
-# PUT(example): Modbus
+RUN mkdir -p /shared && chmod 777 /shared
+RUN echo "[shared]\n\
+    path = /shared\n\
+    read only = no\n\
+    browsable = yes\n\
+    guest ok = yes\
+" >> /etc/samba/smb.conf
 
-# (optional) please add addtional instructions to install other  servers
+## HTTP
 
+RUN git clone https://github.com/avih/miniweb.git
+RUN make -C /miniweb -j4
 
-RUN sudo chmod 777 -R ~/BinPRE/
+## DNP3
 
+RUN git clone https://github.com/dnp3/opendnp3.git
+RUN cmake -B /opendnp3/build -S /opendnp3 && make -C /opendnp3/build -j4
 
+## TFTP
 
+RUN git clone https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
+RUN make -C /tftp-hpa -j4
+
+WORKDIR /BinPRE/Artifact_Evaluation/BinPRE_scripts

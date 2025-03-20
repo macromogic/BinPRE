@@ -14,12 +14,16 @@ import config
 import copy
 import fcntl
 import binascii
+from distutils.util import strtobool
 
 from AAA_Evaluation import *
 
 
 info_file_path = config.info_file_path
 format_file_path = config.format_file_path
+
+def defined(var):
+    return strtobool(os.environ.get(var, '0').tolower())
 
 class Message:
     def __init__(self, ip_src, ip_dst, sport, dport, app_data):
@@ -119,7 +123,7 @@ def remove_analysis(directory_path):
         
 
 def SendInputMsg():
-    print("start sending")
+    print("[INFO] start sending")
     isUDP = False
     proto = sys.argv[1]
 
@@ -199,14 +203,15 @@ def SendInputMsg():
     all_messages = []
     payload_message = []
     #argv[4]baseline mode:oa, bo, all
-    if(manual_flag == 1):
-        payload_message = data
-        try:
-            baseline_mode = sys.argv[4]
-        except:
-            baseline_mode = "all"
+    # if(manual_flag == 1):
+    #     payload_message = data
+    #     try:
+    #         baseline_mode = sys.argv[4]
+    #     except:
+    #         baseline_mode = "all"
         
-    elif(manual_flag == 0):
+    # elif(manual_flag == 0):
+    if True:  ## weijie: manual_flag is always 0
         try:
             baseline_mode = sys.argv[4]
         except:
@@ -222,45 +227,46 @@ def SendInputMsg():
                 all_messages.append(message)
                 payload_message.append(message.app_data)
 
-            
-        print_all_messages(all_messages)
+        if defined('PRINT_PAYLOAD_MESSAGE'):
+            print_all_messages(all_messages)
         
-    elif(manual_flag == 2):
-        try:
-            index = int(sys.argv[4])
-        except:
-            print("Please enter message number!")
+    # elif(manual_flag == 2):
+    #     try:
+    #         index = int(sys.argv[4])
+    #     except:
+    #         print("Please enter message number!")
             
-        try:
-            baseline_mode = sys.argv[4]
-        except:
-            baseline_mode = "all"
+    #     try:
+    #         baseline_mode = sys.argv[4]
+    #     except:
+    #         baseline_mode = "all"
             
-        for i in range(index):
-            new_directory = f"../PUT_test/{config.protocol_name}/{i}_tmp_results"
-            remove_analysis(new_directory)
+    #     for i in range(index):
+    #         new_directory = f"../PUT_test/{config.protocol_name}/{i}_tmp_results"
+    #         remove_analysis(new_directory)
 
-    print(payload_message)
+    if defined('PRINT_PAYLOAD_MESSAGE'):
+        print(payload_message)
 
     config.baseline_mode = baseline_mode
     
     if manual_flag == 0 or manual_flag == 1:
-        time.sleep(10)
+        time.sleep(5)
         sock = config.wait_connect(ip, config.port, isUDP)
         index = 0
         
         while 1:
-            print("index: {}".format(index))
+            print("\033[32;1mindex: {}\033[0m".format(index))
             try:
                 d = payload_message[index] #
             except IndexError:
-                print("Message samples exhausted")
+                print("\033[33;1mMessage samples exhausted\033[0m")
                 break
-            print("\nsend DATA: {}".format(d))
+            print("\n\033[32;1msending\033[0m DATA: {}".format(d))
             info_before_send_size = config.get_file_size(info_file_path)
             format_before_send_size = config.get_file_size(format_file_path)
             print("info_before_send_size:{}".format(info_before_send_size))
-            print("format_before_send_size:{}".format(format_before_send_size))
+            print("format_before_send_size:\033[36;1m{}\033[0m".format(format_before_send_size))
             
 
 
@@ -270,11 +276,11 @@ def SendInputMsg():
                 try:
                     sock.send(d)
                 except (ConnectionResetError, BrokenPipeError) as e:
-                    print(f"!!!!----Rconnect socket!!!!----")
+                    print(f"\033[33;1mCaught {type(e)}!!!!----Rconnect socket!!!!----\033[0m")
                     sock = config.wait_connect(ip, config.port, isUDP)
                     continue
 
-            print("send {}".format(" ".join(hex(c) for c in d))) 
+            print("\033[32;1msent\033[0m {}".format(" ".join(hex(c) for c in d))) 
 
 
              
@@ -283,7 +289,7 @@ def SendInputMsg():
             while 1:
                 try:            
                     recv_content = sock.recv(255)
-                    print("recv {}".format(" ".join(hex(c) for c in recv_content)))
+                    print("\033[32;1mrecv\033[0m {}".format(" ".join(hex(c) for c in recv_content)))
                     break
                 except socket.timeout: 
                     break
@@ -322,7 +328,7 @@ def SendInputMsg():
                 info_before_send_size = info_after_recv_size    
             
             format_after_recv_size = config.get_file_size(format_file_path)
-            print("format_after_recv_size:{}".format(format_after_recv_size))
+            print("format_after_recv_size:\033[33;1m{}\033[0m".format(format_after_recv_size))
             if format_after_recv_size > format_before_send_size:
                 with open(format_file_path, 'rb') as file:
                     file.seek(format_before_send_size)
@@ -335,9 +341,9 @@ def SendInputMsg():
                     print(f'../PUT_test/tmp_results/format_{index}.txt {format_before_send_size}-{format_after_recv_size}')
                 format_before_send_size = format_after_recv_size  
             else:
-                print(f"!!!!----Resend Message{index}")
+                print(f"\033[33;1mFormat file not updated!!!!----Resend Message{index}\033[0m")
                 index -= 1
-                time.sleep(10)
+                time.sleep(5)
                     
 
 
