@@ -123,7 +123,7 @@ def remove_analysis(directory_path):
         
 
 def SendInputMsg():
-    print("[INFO] start sending")
+    print("start sending")
     isUDP = False
     proto = sys.argv[1]
 
@@ -328,7 +328,7 @@ def SendInputMsg():
                 info_before_send_size = info_after_recv_size    
             
             format_after_recv_size = config.get_file_size(format_file_path)
-            print("format_after_recv_size:\033[33;1m{}\033[0m".format(format_after_recv_size))
+            print("format_after_recv_size:\033[33;1m{}\033[0m (was {})".format(format_after_recv_size, format_before_send_size))
             if format_after_recv_size > format_before_send_size:
                 with open(format_file_path, 'rb') as file:
                     file.seek(format_before_send_size)
