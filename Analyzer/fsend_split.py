@@ -311,7 +311,7 @@ def SendInputMsg():
                 if(recv_empty_flag >= 10):
                     print("\033[31;1mWarning! Multiple recv empty detected.\033[0m")
                     break
-            print("\033[32;1mgot\033[0m {}".format(hexdump(recv_content)))
+            print("\033[32;1mgot\033[0m\n{}".format(hexdump(recv_content)))
 
             time.sleep(config.wait_time)                
             
