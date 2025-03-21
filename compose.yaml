@@ -8,3 +8,5 @@ services:
     entrypoint: ["/bin/bash"]
     stdin_open: true
     tty: true
+    security_opt:
+      - seccomp=unconfined

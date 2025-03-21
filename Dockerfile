@@ -21,11 +21,16 @@ ENV PATH="/pin-3.28-98749-g6643ecee5-gcc-linux:${PATH}"
 ## SMB2
 
 RUN mkdir -p /shared && chmod 777 /shared
-RUN echo "[shared]\n\
+RUN echo "\
+[global]\n\
+    map to guest = Bad User\n\
+    security = user\n\
+[shared]\n\
     path = /shared\n\
     read only = no\n\
     browsable = yes\n\
-    guest ok = yes\
+    guest ok = yes\n\
+    min protocol = SMB2\n\
 " >> /etc/samba/smb.conf
 
 ## HTTP
