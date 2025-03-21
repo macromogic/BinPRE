@@ -3,7 +3,7 @@ FROM python:3.10
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \
 build-essential make gcc g++ cmake \
-samba git vim net-tools wget tar
+samba git vim net-tools wget tar tcpdump less
 
 ## BinPRE
 

@@ -25,6 +25,17 @@ format_file_path = config.format_file_path
 def defined(var):
     return strtobool(os.environ.get(var, '0').lower())
 
+
+def hexdump(data):
+    result = []
+    for i in range(0, len(data), 16):
+        s = data[i:i+16]
+        hexa = ' '.join([f"{c:02x}" for c in s])
+        text = ''.join([chr(c) if 32 <= c < 127 else '.' for c in s])
+        result.append(f"{hexa:<48} {text}")
+    return '\n'.join(result)
+
+
 class Message:
     def __init__(self, ip_src, ip_dst, sport, dport, app_data):
         self.ip_src = ip_src
@@ -262,7 +273,7 @@ def SendInputMsg():
             except IndexError:
                 print("\033[33;1mMessage samples exhausted\033[0m")
                 break
-            print("\n\033[32;1msending\033[0m DATA: {}".format(d))
+            print("\n\033[36;1msending\033[0m DATA: {}".format(d))
             info_before_send_size = config.get_file_size(info_file_path)
             format_before_send_size = config.get_file_size(format_file_path)
             print("info_before_send_size:{}".format(info_before_send_size))
@@ -276,11 +287,11 @@ def SendInputMsg():
                 try:
                     sock.send(d)
                 except (ConnectionResetError, BrokenPipeError) as e:
-                    print(f"\033[33;1mCaught {type(e)}!!!!----Rconnect socket!!!!----\033[0m")
+                    print(f"\033[33;1mCaught {type(e).__name__}!!!!----Rconnect socket!!!!----\033[0m")
                     sock = config.wait_connect(ip, config.port, isUDP)
                     continue
 
-            print("\033[32;1msent\033[0m {}".format(" ".join(hex(c) for c in d))) 
+            print("\033[32;1msent\033[0m\n{}".format(hexdump(d))) 
 
 
              
@@ -289,15 +300,18 @@ def SendInputMsg():
             while 1:
                 try:            
                     recv_content = sock.recv(255)
-                    print("\033[32;1mrecv\033[0m {}".format(" ".join(hex(c) for c in recv_content)))
-                    break
+                    print("\033[36;1mrecv\033[0m {}".format(recv_content))
+                    # break
                 except socket.timeout: 
                     break
                 if(recv_content == b""):
                     recv_empty_flag += 1
-                if(recv_empty_flag >= 10):
-                    print("Warning! Multiple recv empty detected.")
+                else:
                     break
+                if(recv_empty_flag >= 10):
+                    print("\033[31;1mWarning! Multiple recv empty detected.\033[0m")
+                    break
+            print("\033[32;1mgot\033[0m {}".format(hexdump(recv_content)))
 
             time.sleep(config.wait_time)                
             
@@ -328,7 +342,7 @@ def SendInputMsg():
                 info_before_send_size = info_after_recv_size    
             
             format_after_recv_size = config.get_file_size(format_file_path)
-            print("format_after_recv_size:\033[33;1m{}\033[0m (was {})".format(format_after_recv_size, format_before_send_size))
+            print("format_after_recv_size:\033[36;1m{}\033[0m (was {})".format(format_after_recv_size, format_before_send_size))
             if format_after_recv_size > format_before_send_size:
                 with open(format_file_path, 'rb') as file:
                     file.seek(format_before_send_size)
