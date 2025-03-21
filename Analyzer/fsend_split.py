@@ -44,15 +44,6 @@ class Message:
         self.dport = dport
         self.app_data = app_data
 
-modbus = []
-s7 = []
-eip = []
-dnp3 = []
-tftp = []
-dns = []
-ftp = []
-http = []
-
 def process_packet(packet, targetport):
     if IP in packet and TCP in packet:    #TCP 
         ip_src = packet[IP].src
@@ -165,44 +156,35 @@ def SendInputMsg():
 
     '''Configuration information for the protocol port number. Modify or add as you need.'''
     if proto == "dnp3":
-        data = dnp3
         port = 4999
         config.port = port
         port = 20000
     elif proto == "eip" or proto == "cip":
-        data = eip
         port = 44818
         config.port = port
     elif proto == "modbus":
-        data = modbus
         port = 502  
         config.port = port
     elif proto == "s7":
-        data = s7
         port = 102
         config.port = port
     elif proto =="ftp":
-        data = ftp
         port = 21
         config.port = port
     elif proto =="dns":
         port = 53
         config.port = port
-        data = dns
         isUDP = True
     elif proto =="tftp":
         port = 69
         config.port = port
-        data = tftp
         isUDP = True
     elif proto =="http":
         port = 80
         config.port = port
-        data = http
     elif proto == "smb2":
         port = 445
         config.port = port
-        data = []
     elif proto =="unknown":
         port = config.port
     
@@ -213,15 +195,6 @@ def SendInputMsg():
         
     all_messages = []
     payload_message = []
-    #argv[4]baseline mode:oa, bo, all
-    # if(manual_flag == 1):
-    #     payload_message = data
-    #     try:
-    #         baseline_mode = sys.argv[4]
-    #     except:
-    #         baseline_mode = "all"
-        
-    # elif(manual_flag == 0):
     if True:  ## weijie: manual_flag is always 0
         try:
             baseline_mode = sys.argv[4]
@@ -240,21 +213,6 @@ def SendInputMsg():
 
         if defined('PRINT_PAYLOAD_MESSAGE'):
             print_all_messages(all_messages)
-        
-    # elif(manual_flag == 2):
-    #     try:
-    #         index = int(sys.argv[4])
-    #     except:
-    #         print("Please enter message number!")
-            
-    #     try:
-    #         baseline_mode = sys.argv[4]
-    #     except:
-    #         baseline_mode = "all"
-            
-    #     for i in range(index):
-    #         new_directory = f"../PUT_test/{config.protocol_name}/{i}_tmp_results"
-    #         remove_analysis(new_directory)
 
     if defined('PRINT_PAYLOAD_MESSAGE'):
         print(payload_message)
@@ -262,7 +220,7 @@ def SendInputMsg():
     config.baseline_mode = baseline_mode
     
     if manual_flag == 0 or manual_flag == 1:
-        time.sleep(5)
+        # time.sleep(5)
         sock = config.wait_connect(ip, config.port, isUDP)
         index = 0
         
@@ -306,6 +264,7 @@ def SendInputMsg():
                     break
                 if(recv_content == b""):
                     recv_empty_flag += 1
+                    time.sleep(1)
                 else:
                     break
                 if(recv_empty_flag >= 10):
