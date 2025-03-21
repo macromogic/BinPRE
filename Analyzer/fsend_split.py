@@ -57,8 +57,11 @@ def process_packet(packet, targetport):
             return message
         elif packet.dport == targetport:
             app_data = packet[TCP].payload.build()
-            message = Message(ip_src, ip_dst, srcport, destport, app_data)
-            return message
+            if app_data:
+                message = Message(ip_src, ip_dst, srcport, destport, app_data)
+                return message
+            else:
+                return None
         
     elif IP in packet and UDP in packet:  #UDP
         ip_src = packet[IP].src
