@@ -465,6 +465,8 @@ void Init() {
     logger::setLoopsInfo(config::flags[3], files[3]);
     logger::setFormatInfo(config::flags[4], files[4]);
     logger::setDataInfo(config::flags[5], files[5]);
+    fprintf(stderr, "\033[36;1mInit\033[0m\n");
+    fflush(stderr);
 }
 /* Close info files*/
 void Fini(INT32 code, VOID *v) {

@@ -122,7 +122,7 @@ namespace logger {
         if (!config::print) return;
         size = std::min(size, (size_t)128);
         logger::formatinfo("[Message]\tsize %lx:\t", size);
-        fprintf(stderr, "size %lx:\t", size);
+        fprintf(stderr, "\033[32;1m[formatinfo]\033[0msize %lx:\t", size);
         for (size_t i = 0; i < size; ++i) {
             logger::formatinfo("(%x) ",*start);
             fprintf(stderr, "(%x) ", *start++);
