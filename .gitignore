@@ -5,3 +5,4 @@ __pycache__
 !Analyzer/pcaps/*
 PUT_test/*
 *.bak
+.vscode

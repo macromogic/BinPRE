@@ -23,7 +23,7 @@ info_file_path = config.info_file_path
 format_file_path = config.format_file_path
 
 def defined(var):
-    return strtobool(os.environ.get(var, '0').tolower())
+    return strtobool(os.environ.get(var, '0').lower())
 
 class Message:
     def __init__(self, ip_src, ip_dst, sport, dport, app_data):

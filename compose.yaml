@@ -1,0 +1,10 @@
+services:
+  testbench:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: testbench
+    working_dir: /BinPRE/Artifact_Evaluation/BinPRE_scripts
+    entrypoint: ["/bin/bash"]
+    stdin_open: true
+    tty: true

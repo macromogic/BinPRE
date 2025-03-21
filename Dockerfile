@@ -15,6 +15,7 @@ RUN pip install -r /BinPRE/requirements.txt
 
 RUN wget https://software.intel.com/sites/landingpage/pintool/downloads/pin-3.28-98749-g6643ecee5-gcc-linux.tar.gz
 RUN tar -xzf pin-3.28-98749-g6643ecee5-gcc-linux.tar.gz
+ENV PIN_ROOT="/pin-3.28-98749-g6643ecee5-gcc-linux"
 ENV PATH="/pin-3.28-98749-g6643ecee5-gcc-linux:${PATH}"
 
 ## SMB2
