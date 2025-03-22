@@ -45,7 +45,7 @@ RUN echo "\
     browsable = yes\n\
     guest ok = yes\n\
     min protocol = SMB2\n\
-" >> /etc/samba/smb.conf
+" >> /usr/local/samba/etc/smb.conf
 
 ## HTTP
 
