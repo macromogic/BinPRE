@@ -228,7 +228,7 @@ void Image(IMG img, VOID *v) {
     const bool isLib = filter::libs(imgName);
 #ifdef BINPRE_DEBUG
     fprintf(stderr, "[Image] \033[36;1mImage: %s (%c%c%c)\033[0m\n", 
-        imgName.c_str(), isMain ? 'M' : '-', isWrapper : 'W' : '-', isLib ? 'L' : '-');
+        imgName.c_str(), isMain ? 'M' : '-', isWrapper ? 'W' : '-', isLib ? 'L' : '-');
 #endif
 
     if (!(isMain || isWrapper || isLib)) return;
