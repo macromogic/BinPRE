@@ -1,6 +1,8 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
+#define BINPRE_DEBUG
+
 #include <string>
 
 namespace config {
