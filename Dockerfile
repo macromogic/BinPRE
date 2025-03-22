@@ -18,6 +18,7 @@ RUN wget https://software.intel.com/sites/landingpage/pintool/downloads/pin-3.28
 RUN tar -xzf pin-3.28-98749-g6643ecee5-gcc-linux.tar.gz
 ENV PIN_ROOT="/pin-3.28-98749-g6643ecee5-gcc-linux"
 ENV PATH="/pin-3.28-98749-g6643ecee5-gcc-linux:${PATH}"
+RUN rm /pin-3.28-98749-g6643ecee5-gcc-linux.tar.gz
 
 ## BinPRE
 
@@ -29,6 +30,7 @@ RUN cd /BinPRE/src && git checkout dev && ./run compile taint
 ## SMB2
 
 RUN wget https://download.samba.org/pub/samba/stable/samba-4.21.4.tar.gz
+RUN pip install markdown crypto dnspython
 RUN tar -xzf samba-4.21.4.tar.gz
 RUN cd samba-4.21.4 && ./configure --enable-debug && make -j ${NJOBS} && make install
 RUN rm /samba-4.21.4.tar.gz
