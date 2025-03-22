@@ -3,13 +3,8 @@ FROM python:3.10
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \
 build-essential make gcc g++ cmake \
-samba git vim net-tools wget tar tcpdump less
-
-## BinPRE
-
-WORKDIR /
-RUN git clone https://github.com/macromogic/BinPRE.git
-RUN pip install -r /BinPRE/requirements.txt
+samba git vim net-tools wget tar tcpdump less \
+strace smbclient
 
 ## Pin
 
@@ -17,6 +12,13 @@ RUN wget https://software.intel.com/sites/landingpage/pintool/downloads/pin-3.28
 RUN tar -xzf pin-3.28-98749-g6643ecee5-gcc-linux.tar.gz
 ENV PIN_ROOT="/pin-3.28-98749-g6643ecee5-gcc-linux"
 ENV PATH="/pin-3.28-98749-g6643ecee5-gcc-linux:${PATH}"
+
+## BinPRE
+
+WORKDIR /
+RUN git clone https://github.com/macromogic/BinPRE.git
+RUN pip install -r /BinPRE/requirements.txt
+RUN cd /BinPRE/src && git checkout dev && ./run compile taint
 
 ## SMB2
 
