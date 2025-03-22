@@ -226,6 +226,10 @@ void Image(IMG img, VOID *v) {
     const bool isMain = IMG_IsMainExecutable(img);
     const bool isWrapper = (imgName.find("libx.so") != std::string::npos);
     const bool isLib = filter::libs(imgName);
+#ifdef BINPRE_DEBUG
+    fprintf(stderr, "[Image] \033[36;1mImage: %s (%c%c%c)\033[0m\n", 
+        imgName.c_str(), isMain ? 'M' : '-', isWrapper : 'W' : '-', isLib ? 'L' : '-');
+#endif
 
     if (!(isMain || isWrapper || isLib)) return;
     
