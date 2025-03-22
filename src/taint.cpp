@@ -240,7 +240,14 @@ void Image(IMG img, VOID *v) {
                 continue;
             } 
             /* function name*/
-            std::string *rtnName = new std::string(rtn.Name());
+            // std::string *rtnName = new std::string(rtn.Name());
+            std::string rawName(rtn.Name());
+            size_t plt_idx = rawName.find("@plt");
+            if (plt_idx != std::string::npos) {
+                rawName = rawName.substr(0, plt_idx);
+            }
+            std::string* rtnName = new std::string(rawName);
+
             
             if (filter::blackfunc(*rtnName)) continue;
             rtn.Open();
