@@ -1,2 +1,2 @@
 cd ../../src
-./run run taint smbd --foreground --no-process-group
+./run run taint /usr/local/samba/sbin/smbd --foreground --no-process-group
