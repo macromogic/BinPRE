@@ -115,8 +115,10 @@ void read_point(const char *point, int fd, uint64_t buffer, size_t length, ssize
     static int _fd;
     static uint64_t _buffer;
     static size_t _length;
+    eprintln("start");
     
     if (!monitor::valid() || !filter::taint_start()) return;
+    eprintln("taint");
     /* Save the file descriptor, buffer address, and data length.*/
     if (point == filter::entry) {
         _fd = fd;
@@ -133,7 +135,9 @@ void write_point(const char *point, int fd, uint64_t buffer, size_t length, ssiz
     static int _fd;
     // static uint64_t _buffer;
     // static size_t _length;
+    eprintln("start");
     if (monitor::valid() || !filter::taint_start()) return;
+    eprintln("taint");
 
     if (point == filter::entry) {
         _fd = fd;
@@ -150,7 +154,9 @@ void send_point(const char *point, int socket, uint64_t buffer, size_t length, i
     static int _socket;
     // static uint64_t _buffer;
     // static size_t _length;
+    eprintln("start");
     if (!monitor::valid() || !filter::taint_start()) return;
+    eprintln("taint");
 
     if (point == filter::entry) {
         _socket = socket;
@@ -167,7 +173,9 @@ void sendto_point(const char *point, int socket, uint64_t buffer, size_t length,
     static int _socket;
     // static uint64_t _buffer;
     // static size_t _length;
+    eprintln("start");
     if (!monitor::valid() || !filter::taint_start()) return;
+    eprintln("taint");
 
     if (point == filter::entry) {
         _socket = socket;
@@ -184,7 +192,9 @@ void sendmsg_point(const char *point, int socket, struct msghdr* mhdr, int flags
     static int _socket;
     // static uint64_t _buffer;
     // static size_t _length;
+    eprintln("start");
     if (!monitor::valid() || !filter::taint_start()) return;
+    eprintln("taint");
     if (point == filter::entry) {
         _socket = socket;
         // _buffer = (uint64_t) mhdr->msg_iov[0].iov_base;
@@ -201,7 +211,9 @@ void recv_point(const char *point, int socket, uint64_t buffer, size_t length, i
     static uint64_t _buffer;
     static size_t _length;
     // static int _flags;
+    eprintln("start");
     if (!monitor::valid() || !filter::taint_start()) return;
+    eprintln("taint");
 
     if (point == filter::entry) {
         _socket = socket;
@@ -209,6 +221,7 @@ void recv_point(const char *point, int socket, uint64_t buffer, size_t length, i
         _length = length;
     }
     if (filter::read(_socket, _buffer, _length)) return;
+    eprintln("read end");
 
     if (point == filter::exit) {
         cur_sock = _socket;
@@ -227,7 +240,9 @@ void recvfrom_point(const char *point, int socket, uint64_t buffer, size_t lengt
     static uint64_t _buffer;
     static size_t _length;
     // static int _flags;
+    eprintln("start");
     if (!monitor::valid() || !filter::taint_start()) return;
+    eprintln("taint");
 
     if (point == filter::entry) {
         _socket = socket;
@@ -236,6 +251,7 @@ void recvfrom_point(const char *point, int socket, uint64_t buffer, size_t lengt
     }
 
     if (filter::read(_socket, _buffer, _length)) return;
+    eprintln("read end");
     
     if (point == filter::exit) {
         cur_sock = _socket;
@@ -251,7 +267,9 @@ void recvmsg_point(const char *point, int socket, struct msghdr* mhdr, int flags
     // static struct msghdr* _mhdr;
     // static int _flags;
     static uint64_t _buffer;
+    eprintln("start");
     if (!monitor::valid() || !filter::taint_start()) return;
+    eprintln("taint");
 
     if (point == filter::entry) {
         _socket = socket;
@@ -264,12 +282,14 @@ void recvmsg_point(const char *point, int socket, struct msghdr* mhdr, int flags
     if (point == filter::exit) {
         ssize_t _length = ret;
         if (filter::read(_socket, _buffer, _length)) return;
+        eprintln("read end");
         cur_sock = _socket;
         if (_length > 0) {
             logger::info("recvmsg_point taint\n");//
             TaintEngine::Init(_buffer, _length);
         }
     }
+    eprintln("end");
 }
 
 

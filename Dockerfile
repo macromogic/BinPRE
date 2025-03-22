@@ -32,7 +32,7 @@ RUN cd /BinPRE/src && git checkout dev && ./run compile taint
 RUN wget https://download.samba.org/pub/samba/stable/samba-4.21.4.tar.gz
 RUN pip install markdown crypto dnspython
 RUN tar -xzf samba-4.21.4.tar.gz
-RUN cd samba-4.21.4 && ./configure --enable-debug && make -j ${NJOBS} && make install
+RUN cd samba-4.21.4 && ./configure --enable-debug --with-static-modules=all && make -j ${NJOBS} && make install
 RUN rm /samba-4.21.4.tar.gz
 RUN mkdir -p /shared && chmod 777 /shared
 RUN echo "\

@@ -426,4 +426,6 @@ namespace filter {
 
 }// end of namespace filter
 
+#define eprintln(fmt, ...) fprintf(stderr, "\033[36;1m[%s] " fmt "\033[0m\n", __func__, ##__VA_ARGS__)
+
 #endif

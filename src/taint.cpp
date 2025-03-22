@@ -274,8 +274,8 @@ void Image(IMG img, VOID *v) {
                     /* Handle Ins*/
                     Instruction(ins);
                 }
-            } 
-            if (isWrapper) {
+            // } 
+            // if (isLib) {
             /* According function names, insert different callback funcs */
                 if (*rtnName == "read") {//Reading data from a file or file descriptor
                     RTN_InsertCall(
