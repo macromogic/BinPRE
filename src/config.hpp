@@ -70,7 +70,7 @@ const char *libs[] = {
     "libsnap7",
     "libmodbus",
     "libtest",
-    
+    "libmessages-dgm-samba4",
 };
 
 }  // namespace config

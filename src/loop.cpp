@@ -86,7 +86,6 @@ VOID Trace(TRACE trace, VOID *v) {
     std::string imgName = IMG_Name(img);
     bool isMain = IMG_IsMainExecutable(img);
     bool isLib = filter::libs(imgName);
-    fprintf(stderr, "\033[36;1mImage: %s (%c%c)\033[0m\n", imgName.c_str(), isMain ? 'M' : '-', isLib ? 'L' : '-');
     if (!isMain && !isLib) return;
     
     int id = RTN_Id(rtn);
