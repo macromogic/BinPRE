@@ -34,7 +34,8 @@ def connect(ip_port, udp=False, timeout=2):
 
 
 def get_payload(pcap_path, port, udp, num_requests):
-    raw_packets = rdpcap(pcap_path.as_posix())
+    pcap_path = pcap_path.as_posix()
+    raw_packets = rdpcap(pcap_path)
     payloads = []
     layer = 'UDP' if udp else 'TCP'
     for packet in raw_packets:
@@ -45,7 +46,7 @@ def get_payload(pcap_path, port, udp, num_requests):
             payloads.append(payload)
     if num_requests > 0:
         payloads = payloads[:num_requests]
-    print(f"Loaded {len(payloads)} payloads")
+    print(f"Loaded {len(payloads)} payloads from {pcap_path}")
     return payloads
 
 
