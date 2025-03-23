@@ -37,11 +37,11 @@ def get_payload(pcap_path, port, udp, num_requests):
     pcap_path = pcap_path.as_posix()
     raw_packets = rdpcap(pcap_path)
     payloads = []
-    layer = 'UDP' if udp else 'TCP'
+    proto = 'UDP' if udp else 'TCP'
     for packet in raw_packets:
-        if not packet.haslayer(layer):
+        if not packet.haslayer(proto):
             continue
-        layer = packet[layer]
+        layer = packet[proto]
         if layer.dport == port and (payload := layer.payload.build()):
             payloads.append(payload)
     if num_requests > 0:
