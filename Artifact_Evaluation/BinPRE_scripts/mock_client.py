@@ -62,7 +62,7 @@ def hexdump(data):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('protocol', type=str)
-    parser.add_argument('--host', '-h', type=str, default='127.0.0.1')
+    parser.add_argument('--host', '-H', type=str, default='127.0.0.1')
     parser.add_argument('--port', '-p', type=int)
     parser.add_argument('--num-requests', '-n', type=int, default=-1)
     parser.add_argument('--timeout', '-t', type=int, default=2)
