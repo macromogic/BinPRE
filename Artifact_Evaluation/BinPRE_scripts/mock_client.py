@@ -71,11 +71,9 @@ def main():
     args = parser.parse_args()
 
     protocol = args.protocol.lower()
-    if not args.input:
-        binpre_ae_dir = Path(__file__).absolute().parent.parent
-        pcap_path = binpre_ae_dir / 'pcaps' / f'{protocol}_50.pcap'
-    else:
-        pcap_path = args.input
+    if not (pcap_path := args.input):
+        binpre_dir = Path(__file__).absolute().parent.parent.parent
+        pcap_path = binpre_dir / 'Analyzer' / 'pcaps' / f'{protocol}_50.pcap'
     port, is_udp = protocol_config(protocol)
     ip_port = (args.host, args.port or port)
 

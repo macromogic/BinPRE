@@ -426,6 +426,10 @@ namespace filter {
 
 }// end of namespace filter
 
+#ifdef TESTHOOK
 #define eprintln(fmt, ...) logger::print("\033[36;1m[%s] " fmt "\033[0m\n", __func__, ##__VA_ARGS__)
+#else
+#define eprintln(fmt, ...)
+#endif
 
 #endif

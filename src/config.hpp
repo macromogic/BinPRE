@@ -2,6 +2,7 @@
 #define _CONFIG_H
 
 // #define BINPRE_DEBUG
+// #define TESTHOOK
 
 #include <string>
 

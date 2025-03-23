@@ -240,13 +240,16 @@ void Image(IMG img, VOID *v) {
                 continue;
             } 
             /* function name*/
-            // std::string *rtnName = new std::string(rtn.Name());
+#ifdef TESTHOOK
             std::string rawName(rtn.Name());
             size_t plt_idx = rawName.find("@plt");
             if (plt_idx != std::string::npos) {
                 rawName = rawName.substr(0, plt_idx);
             }
             std::string* rtnName = new std::string(rawName);
+#else
+            std::string *rtnName = new std::string(rtn.Name());
+#endif
 
             
             if (filter::blackfunc(*rtnName)) continue;
@@ -281,8 +284,10 @@ void Image(IMG img, VOID *v) {
                     /* Handle Ins*/
                     Instruction(ins);
                 }
-            // } 
-            // if (isLib) {
+#ifndef TESTHOOK
+            } 
+            if (isLib) {
+#endif
             /* According function names, insert different callback funcs */
                 if (*rtnName == "read") {//Reading data from a file or file descriptor
                     RTN_InsertCall(
