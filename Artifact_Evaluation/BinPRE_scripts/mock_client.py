@@ -90,6 +90,8 @@ def main():
         response = b''
         for _ in range(args.num_retries):
             if response := sock.recv(255):
+                while chunk := sock.recv(255):
+                    response += chunk
                 break
             time.sleep(0.5)
         if response:
