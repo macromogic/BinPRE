@@ -76,7 +76,8 @@ def main():
         binpre_dir = Path(__file__).absolute().parent.parent.parent
         pcap_path = binpre_dir / 'Analyzer' / 'pcaps' / f'{protocol}_50.pcap'
     port, is_udp = protocol_config(protocol)
-    ip_port = (args.host, args.port or port)
+    port = args.port or port
+    ip_port = (args.host, port)
 
     payloads = get_payload(pcap_path, port, is_udp, args.num_requests)
     sock = connect(ip_port, is_udp, args.timeout)
