@@ -3,14 +3,8 @@ FROM python:3.10
 ARG DEBIAN_FRONTEND=noninteractive
 ARG NJOBS=8
 RUN apt update && apt install -y \
-acl attr autoconf bind9utils bison build-essential cmake make \
-debhelper dnsutils docbook-xml docbook-xsl flex gdb libjansson-dev krb5-user \
-libacl1-dev libaio-dev libarchive-dev libattr1-dev libblkid-dev libbsd-dev \
-libcap-dev libcups2-dev libgnutls28-dev libgpgme-dev libjson-perl \
-libldap2-dev libncurses5-dev libpam0g-dev libparse-yapp-perl \
-libpopt-dev libreadline-dev nettle-dev perl pkg-config \
-xsltproc zlib1g-dev liblmdb-dev lmdb-utils gcc g++ libdbus-1-dev \
-git vim net-tools wget tar tcpdump less strace smbclient
+build-essential make gcc g++ cmake \
+git vim net-tools wget tar tcpdump less
 
 ## Pin
 
@@ -22,30 +16,10 @@ RUN rm /pin-3.28-98749-g6643ecee5-gcc-linux.tar.gz
 
 ## BinPRE
 
-WORKDIR /
 RUN git clone https://github.com/macromogic/BinPRE.git
 RUN pip install -r /BinPRE/requirements.txt
 RUN cd /BinPRE/src && git checkout dev && ./run compile taint
-
-## SMB2
-
-RUN wget https://download.samba.org/pub/samba/stable/samba-4.21.4.tar.gz
-RUN pip install markdown crypto dnspython
-RUN tar -xzf samba-4.21.4.tar.gz
-RUN cd samba-4.21.4 && ./configure --enable-debug --with-static-modules=all && make -j ${NJOBS} && make install
-RUN rm /samba-4.21.4.tar.gz
-RUN mkdir -p /shared && chmod 777 /shared
-RUN echo "\
-[global]\n\
-    map to guest = Bad User\n\
-    security = user\n\
-[shared]\n\
-    path = /shared\n\
-    read only = no\n\
-    browsable = yes\n\
-    guest ok = yes\n\
-    min protocol = SMB2\n\
-" >> /usr/local/samba/etc/smb.conf
+RUN mkdir -p /pcaps
 
 ## HTTP
 
@@ -61,5 +35,10 @@ RUN cmake -B /opendnp3/build -S /opendnp3 && make -C /opendnp3/build -j ${NJOBS}
 
 RUN git clone https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
 RUN make -C /tftp-hpa -j ${NJOBS}
+
+## DNS
+
+RUN git clone https://github.com/infinet/dnsmasq.git
+RUN make -C /dnsmasq -j ${NJOBS}
 
 WORKDIR /BinPRE/Artifact_Evaluation/BinPRE_scripts

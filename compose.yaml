@@ -10,3 +10,5 @@ services:
     tty: true
     security_opt:
       - seccomp=unconfined
+    volumes:
+      - ./pcaps:/pcaps
