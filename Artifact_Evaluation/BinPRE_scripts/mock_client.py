@@ -1,24 +1,37 @@
 import argparse
 import socket
 import time
+from dataclasses import dataclass
 from pathlib import Path
 from scapy.all import rdpcap
 
 
-def protocol_config(protocol):
-    match protocol:
-        case 'modbus':
-            return 502, False
-        case 'tftp':
-            return 69, True
-        case 'http':
-            return 80, False
-        case 'dns':
-            return 53, True
-        case 'dnp3':
-            return 20000, False
-        case _:
-            raise ValueError(f"Unknown protocol: {protocol}")
+@dataclass
+class Config:
+    host: str = '127.0.0.1'
+    port: int
+    udp: bool = False
+    needs_reconnect: bool = False
+
+    @property
+    def ip_port(self):
+        return self.host, self.port
+
+    @classmethod
+    def from_protocol(cls, protocol):
+        match protocol:
+            case 'modbus':
+                return cls(port=502)
+            case 'tftp':
+                return cls(port=69, udp=True)
+            case 'http':
+                return cls(port=80)
+            case 'dns':
+                return cls(port=53, udp=True)
+            case 'dnp3':
+                return cls(port=20000)
+            case _:
+                raise ValueError(f"Unknown protocol: {protocol}")
 
 
 def connect(ip_port, udp=False, timeout=2):
@@ -75,16 +88,18 @@ def main():
     if not (pcap_path := args.input):
         binpre_dir = Path(__file__).absolute().parent.parent.parent
         pcap_path = binpre_dir / 'Analyzer' / 'pcaps' / f'{protocol}_50.pcap'
-    port, is_udp = protocol_config(protocol)
-    port = args.port or port
-    ip_port = (args.host, port)
+    config = Config.from_protocol(protocol)
+    if args.host:
+        config.host = args.host
+    if args.port:
+        config.port = args.port
 
-    payloads = get_payload(pcap_path, port, is_udp, args.num_requests)
-    sock = connect(ip_port, is_udp, args.timeout)
+    payloads = get_payload(pcap_path, config.port, config.udp, args.num_requests)
+    sock = connect(config.ip_port, config.udp, args.timeout)
     for i, payload in enumerate(payloads, 1):
         print(f"Sending payload {i}/{len(payloads)} of size {len(payload)}:\n{hexdump(payload)}")
-        if is_udp:
-            sock.sendto(payload, ip_port)
+        if config.udp:
+            sock.sendto(payload, config.ip_port)
         else:
             sock.send(payload)
         response = b''
@@ -98,6 +113,9 @@ def main():
             print(f"Received response of size {len(response)}:\n{hexdump(response)}")
         else:
             raise RuntimeError(f"No response received after {args.num_retries} tries")
+        if config.needs_reconnect:
+            sock.close()
+            sock = connect(config.ip_port, config.udp, args.timeout)
     sock.close()
 
 
