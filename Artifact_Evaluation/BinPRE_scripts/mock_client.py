@@ -8,7 +8,7 @@ from scapy.all import rdpcap
 
 @dataclass
 class Config:
-    host: str = '127.0.0.1'
+    host: str
     port: int
     udp: bool = False
     needs_reconnect: bool = False
@@ -18,18 +18,18 @@ class Config:
         return self.host, self.port
 
     @classmethod
-    def from_protocol(cls, protocol):
+    def from_protocol(cls, host, protocol):
         match protocol:
             case 'modbus':
-                return cls(port=502)
+                return cls(host=host, port=502)
             case 'tftp':
-                return cls(port=69, udp=True)
+                return cls(host=host, port=69, udp=True)
             case 'http':
-                return cls(port=80)
+                return cls(host=host, port=80)
             case 'dns':
-                return cls(port=53, udp=True)
+                return cls(host=host, port=53, udp=True)
             case 'dnp3':
-                return cls(port=20000)
+                return cls(host=host, port=20000)
             case _:
                 raise ValueError(f"Unknown protocol: {protocol}")
 
@@ -88,9 +88,7 @@ def main():
     if not (pcap_path := args.input):
         binpre_dir = Path(__file__).absolute().parent.parent.parent
         pcap_path = binpre_dir / 'Analyzer' / 'pcaps' / f'{protocol}_50.pcap'
-    config = Config.from_protocol(protocol)
-    if args.host:
-        config.host = args.host
+    config = Config.from_protocol(args.host or '127.0.0.1', protocol)
     if args.port:
         config.port = args.port
 
