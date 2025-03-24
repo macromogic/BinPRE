@@ -11,7 +11,7 @@ class Config:
     host: str
     port: int
     udp: bool = False
-    needs_reconnect: bool = False
+    allow_reconnect: bool = False
 
     @property
     def ip_port(self):
@@ -25,7 +25,7 @@ class Config:
             case 'tftp':
                 return cls(host=host, port=69, udp=True)
             case 'http':
-                return cls(host=host, port=80)
+                return cls(host=host, port=80, allow_reconnect=True)
             case 'dns':
                 return cls(host=host, port=53, udp=True)
             case 'dnp3':
@@ -95,25 +95,34 @@ def main():
     payloads = get_payload(pcap_path, config.port, config.udp, args.num_requests)
     sock = connect(config.ip_port, config.udp, args.timeout)
     for i, payload in enumerate(payloads, 1):
+        max_reconnect = 1 if config.allow_reconnect else 0
+        reconnects = 0
         print(f"Sending payload {i}/{len(payloads)} of size {len(payload)}:\n{hexdump(payload)}")
-        if config.udp:
-            sock.sendto(payload, config.ip_port)
-        else:
-            sock.send(payload)
-        response = b''
-        for _ in range(args.num_retries):
-            if response := sock.recv(255):
-                while chunk := sock.recv(255):
-                    response += chunk
-                break
-            time.sleep(0.5)
-        if response:
-            print(f"Received response of size {len(response)}:\n{hexdump(response)}")
-        else:
-            raise RuntimeError(f"No response received after {args.num_retries} tries")
-        if config.needs_reconnect:
-            sock.close()
-            sock = connect(config.ip_port, config.udp, args.timeout)
+        while reconnects <= max_reconnect:
+            try:
+                if config.udp:
+                    sock.sendto(payload, config.ip_port)
+                else:
+                    sock.send(payload)
+                response = b''
+                for _ in range(args.num_retries):
+                    if response := sock.recv(255):
+                        while chunk := sock.recv(255):
+                            response += chunk
+                        break
+                    time.sleep(0.5)
+                if response:
+                    print(f"Received response of size {len(response)}:\n{hexdump(response)}")
+                    break
+                else:
+                    raise RuntimeError(f"No response received after {args.num_retries} tries")
+            except BrokenPipeError:
+                if not config.allow_reconnect:
+                    raise
+                print("Connection closed, reconnecting...")
+                sock.close()
+                sock = connect(config.ip_port, config.udp, args.timeout)
+            reconnects += 1
     sock.close()
 
 
