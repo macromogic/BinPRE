@@ -185,6 +185,7 @@ def SendInputMsg():
     elif proto =="http":
         port = 80
         config.port = port
+        config.Reconnect = True
     elif proto == "smb2":
         port = 445
         config.port = port
@@ -257,22 +258,39 @@ def SendInputMsg():
 
              
                 
-            recv_empty_flag = 0
-            while 1:
-                try:            
-                    recv_content = sock.recv(255)
-                    print("\033[36;1mrecv\033[0m {}".format(recv_content))
-                    # break
-                except socket.timeout: 
+            # recv_empty_flag = 0
+            # while 1:
+            #     try:            
+            #         recv_content = sock.recv(255)
+            #         print("\033[36;1mrecv\033[0m {}".format(recv_content))
+            #         # break
+            #     except socket.timeout: 
+            #         break
+            #     if(recv_content == b""):
+            #         recv_empty_flag += 1
+            #         time.sleep(1)
+            #     else:
+            #         break
+            #     if(recv_empty_flag >= 10):
+            #         print("\033[31;1mWarning! Multiple recv empty detected.\033[0m")
+            #         break
+            recv_content = b''
+            reason = '(unknown)'
+            num_retries = 10
+            for _ in range(num_retries):
+                try:
+                    if recv_content := sock.recv(255):
+                        while chunk := sock.recv(255):
+                            recv_content += chunk
+                        break
+                except socket.timeout:
+                    reason = 'timeout'
                     break
-                if(recv_content == b""):
-                    recv_empty_flag += 1
-                    time.sleep(1)
-                else:
-                    break
-                if(recv_empty_flag >= 10):
-                    print("\033[31;1mWarning! Multiple recv empty detected.\033[0m")
-                    break
+                time.sleep(0.5)
+            else:
+                reason = f'({num_retries}) retries'
+            if not recv_content:
+                print(f"\033[31;1mWarning: No response received after {reason}\033[0m")
             print("\033[32;1mgot\033[0m\n{}".format(hexdump(recv_content)))
 
             time.sleep(config.wait_time)                

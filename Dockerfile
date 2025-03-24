@@ -31,7 +31,7 @@ ENV BINPRE_HTTP_SERVER="/miniweb/miniweb"
 
 RUN git clone https://github.com/dnp3/opendnp3.git
 RUN cmake -B /opendnp3/build -S /opendnp3 -DDNP3_EXAMPLES=ON && make -C /opendnp3/build -j ${NJOBS}
-ENV BINPRE_DNP3_SERVER="/opendnp3/build/examples/outstation"
+ENV BINPRE_DNP3_SERVER="/opendnp3/build/cpp/examples/outstation/outstation-demo"
 
 ## TFTP
 
