@@ -284,10 +284,8 @@ void Image(IMG img, VOID *v) {
                     /* Handle Ins*/
                     Instruction(ins);
                 }
-#ifndef TESTHOOK
             } 
-            if (isLib) {
-#endif
+            if (isWrapper) {
             /* According function names, insert different callback funcs */
                 if (*rtnName == "read") {//Reading data from a file or file descriptor
                     RTN_InsertCall(
