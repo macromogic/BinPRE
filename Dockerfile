@@ -18,7 +18,7 @@ RUN rm /pin-3.28-98749-g6643ecee5-gcc-linux.tar.gz
 
 RUN git clone https://github.com/macromogic/BinPRE.git
 RUN pip install -r /BinPRE/requirements.txt
-RUN cd /BinPRE/src && git checkout dev && ./run compile taint
+RUN cd /BinPRE/src && ./run compile taint
 RUN mkdir -p /pcaps
 
 ## HTTP
