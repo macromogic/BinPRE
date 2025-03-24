@@ -43,6 +43,24 @@ ENV BINPRE_TFTP_SERVER="/tftp-hpa/tftpd"
 
 RUN git clone https://github.com/infinet/dnsmasq.git
 RUN make -C /dnsmasq -j ${NJOBS}
+RUN echo "\
+domain-needed\n\
+bogus-priv\n\
+filterwin2k\n\
+localise-queries\n\
+listen-address=10.1.0.1\n\
+dhcp-range=lan.hzsogood.net,10.1.0.100,10.1.0.250,255.255.255.0,12h\n\
+local=/lan.hzsogood.net/\n\
+domain=lan.hzsogood.net\n\
+expand-hosts\n\
+no-negcache\n\
+resolv-file=/etc/resolv.conf\n\
+dhcp-authoritative\n\
+dhcp-leasefile=/etc/dhcp.leases\n\
+read-ethers\n\
+dhcp-host=00:14:A4:60:73:66,kong,infinite\n\
+dhcp-host=00:1d:d9:45:1f:8a,theharlequin,infinite\n\
+dhcp-host=00:01:e6:4e:64:47,printer,infinite" > /dnsmasq.conf
 ENV BINPRE_DNS_SERVER="/dnsmasq/src/dnsmasq"
 
 WORKDIR /BinPRE/Artifact_Evaluation/BinPRE_scripts
