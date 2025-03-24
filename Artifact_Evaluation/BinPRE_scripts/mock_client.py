@@ -101,16 +101,23 @@ def main():
         else:
             sock.send(payload)
         response = b''
+        reason = '(unknown)'
         for _ in range(args.num_retries):
-            if response := sock.recv(255):
-                while chunk := sock.recv(255):
-                    response += chunk
+            try:
+                if response := sock.recv(255):
+                    while chunk := sock.recv(255):
+                        response += chunk
+                    break
+            except socket.timeout:
+                reason = 'timeout'
                 break
             time.sleep(0.5)
+        else:
+            reason = f'max retries ({args.num_retries})'
         if response:
             print(f"Received response of size {len(response)}:\n{hexdump(response)}")
         else:
-            raise RuntimeError(f"No response received after {args.num_retries} tries")
+            raise RuntimeError(f"No response received after {reason}")
         if config.needs_reconnect:
             sock.close()
             sock = connect(config.ip_port, config.udp, args.timeout)

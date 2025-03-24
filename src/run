@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 mkdir -p obj-intel64
 if [ "$1" = "compile" ];then
     touch $2.cpp
