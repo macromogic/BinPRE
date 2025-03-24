@@ -1,3 +1,10 @@
+__all__ = [
+    'dns_Syntax_Groundtruth',
+    'dns_Semantic_Groundtruth',
+    'dns_commandOffset',
+    'dns_lengthOffset',
+    'dns_Semantic_Functions_Groundtruth',
+]
 
 # semantic_Types = ['Static', 'Group', 'String', 'Bit Field', 'Bytes']
 semantic_Types = ['Static', 'Group', 'String', 'Integer', 'Bytes']

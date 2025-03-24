@@ -2,7 +2,7 @@
 
 set -u
 cd ../../Analyzer
-case $1 in
+case ${1:-} in
     modbus)
         python3 fsend_split.py modbus 0 0 oa xx big 0
         ;;
@@ -18,7 +18,7 @@ case $1 in
         python3 fsend_split.py dnp3 0 0 oa index big 0
         ;;
     dns)
-        python3 fsend_split.py dnp3 0 0 oa index big 0
+        python3 fsend_split.py dns 0 0 oa index big 0
         ;;
     *)
         echo "Usage: $0 [modbus|http|tftp|dnp3|dns]"

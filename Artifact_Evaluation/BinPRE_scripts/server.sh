@@ -2,7 +2,7 @@
 
 set -u
 cd ../../src
-case $1 in
+case ${1:-} in
     modbus)
         ./run run taint ./freemodbus/tcpmodbus
         ;;
