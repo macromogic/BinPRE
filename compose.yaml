@@ -11,4 +11,4 @@ services:
     security_opt:
       - seccomp=unconfined
     volumes:
-      - ./pcaps:/pcaps
+      - ./shared:/shared

@@ -4,7 +4,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG NJOBS=8
 RUN apt update && apt install -y \
 build-essential make gcc g++ cmake \
-git vim net-tools wget tar tcpdump less
+git vim net-tools wget tar tcpdump less strace
 
 ## Pin
 
