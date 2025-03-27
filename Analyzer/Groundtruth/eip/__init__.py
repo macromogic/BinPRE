@@ -63,7 +63,7 @@ _cip_payloads = [
 ]
 
 _eip_gt = {
-    i: packet(len(payloads)).parse(None, sum(payloads, ()))
+    i: packet(len(payloads)).parse(None, *sum(payloads, ()))
     for i, payloads in enumerate(_cip_payloads)
 }
 
