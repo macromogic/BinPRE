@@ -25,6 +25,6 @@ case ${1:-} in
         ./run run taint $BINPRE_EIP_SERVER lo
         ;;
     *)
-        echo "Usage: $0 [modbus|http|tftp|dnp3|dns]"
+        echo "Usage: $0 [modbus|http|tftp|dnp3|dns|eip]"
         ;;
 esac

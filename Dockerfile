@@ -4,7 +4,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG NJOBS=8
 RUN apt update && apt install -y \
 build-essential make gcc g++ cmake \
-git vim net-tools wget tar tcpdump less
+git vim net-tools wget tar tcpdump less \
+libcap-dev
 
 ## Pin
 
@@ -25,6 +26,12 @@ cd /BinPRE/src\n\
 git checkout dev\n\
 git pull\n\
 ./run compile taint" > /dev.init.sh
+
+## EIP
+
+RUN git clone https://github.com/EIPStackGroup/OpENer.git
+RUN cd /OpENer/bin/posix && ./setup_posix.sh && make -j ${NJOBS}
+ENV BINPRE_EIP_SERVER="/OpENer/bin/posix/src/ports/POSIX/OpENer"
 
 ## HTTP
 

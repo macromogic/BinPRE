@@ -25,6 +25,6 @@ case ${1:-} in
         python3 fsend_split.py eip 0 0 oa index small 0
         ;;
     *)
-        echo "Usage: $0 [modbus|http|tftp|dnp3|dns]"
+        echo "Usage: $0 [modbus|http|tftp|dnp3|dns|eip]"
         ;;
 esac
