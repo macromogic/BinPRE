@@ -1,7 +1,6 @@
 from ..common import Packet, Field
 from .payload import EIPItem, CIPItem
 from typing import Tuple, List
-from itertools import accumulate
 
 _eip_common_fields = [
     ### Encapsulation Header ###
@@ -23,7 +22,7 @@ _eip_common_fields = [
 ]
 
 def packet(n: int) -> Packet:
-    return accumulate([Packet(*_eip_common_fields)] * n)
+    return sum([Packet(*_eip_common_fields)] * n)
 
 class EIPPayload:
     @classmethod

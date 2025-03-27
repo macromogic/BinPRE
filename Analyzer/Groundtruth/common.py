@@ -173,6 +173,12 @@ class Packet:
     def __add__(self, other: 'Packet') -> 'Packet':
         return Packet(*self.fields, *other.fields)
 
+    def __radd__(self, other) -> 'Packet':
+        if not other:
+            return self
+        elif isinstance(other, Packet):
+            return other.__add__(self)
+        raise TypeError(f"unsupported operand type(s) for +: '{type(other)}' and 'Packet'")
 
 def postprocess(
         gt: Dict[int, Tuple[List[int], Dict[str, str], Dict[str, str]]]

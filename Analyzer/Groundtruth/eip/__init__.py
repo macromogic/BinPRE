@@ -1,6 +1,5 @@
 from ..common import postprocess
 from .packets import EIPPayload, packet
-from itertools import accumulate
 
 __all__ = [
     'eip_Syntax_Groundtruth',
@@ -64,7 +63,7 @@ _cip_payloads = [
 ]
 
 _eip_gt = {
-    i: packet(len(payloads)).parse(None, *accumulate(payloads))
+    i: packet(len(payloads)).parse(None, sum(payloads, ()))
     for i, payloads in enumerate(_cip_payloads)
 }
 
