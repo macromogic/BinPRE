@@ -169,3 +169,25 @@ class Packet:
         )
 
         return [-1] + syntax, semantic, functions
+
+    def __add__(self, other: 'Packet') -> 'Packet':
+        return Packet(*self.fields, *other.fields)
+
+    def __radd__(self, other) -> 'Packet':
+        if not other:
+            return self
+        elif isinstance(other, Packet):
+            return other.__add__(self)
+        raise TypeError(f"unsupported operand type(s) for +: '{type(other)}' and 'Packet'")
+
+def postprocess(
+        gt: Dict[int, Tuple[List[int], Dict[str, str], Dict[str, str]]]
+) -> Tuple[Dict[int, List[int]], Dict[int, Dict[str, str]], Dict[int, Dict[str, str]]]:
+    syntax = {}
+    semantic = {}
+    functions = {}
+    for i, (syn, sem, fn) in gt.items():
+        syntax[i] = syn
+        semantic[i] = sem
+        functions[i] = fn
+    return syntax, semantic, functions

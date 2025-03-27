@@ -1,7 +1,8 @@
 #!/bin/bash
 
 set -u
-cd ../../Analyzer
+BINPRE_PATH=$(dirname $(dirname $(dirname $(realpath $0))))
+cd $BINPRE_PATH/Analyzer
 case ${1:-} in
     modbus)
         python3 fsend_split.py modbus 0 0 oa xx big 0
@@ -20,7 +21,10 @@ case ${1:-} in
     dns)
         python3 fsend_split.py dns 0 0 oa index big 0
         ;;
+    eip)
+        python3 fsend_split.py eip 0 0 oa index small 0
+        ;;
     *)
-        echo "Usage: $0 [modbus|http|tftp|dnp3|dns]"
+        echo "Usage: $0 [modbus|http|tftp|dnp3|dns|eip]"
         ;;
 esac

@@ -1,7 +1,8 @@
 #!/bin/bash
 
 set -u
-cd ../../src
+BINPRE_PATH=$(dirname $(dirname $(dirname $(realpath $0))))
+cd $BINPRE_PATH/src
 case ${1:-} in
     modbus)
         ./run run taint ./freemodbus/tcpmodbus
@@ -20,7 +21,10 @@ case ${1:-} in
     dns)
         ./run run taint $BINPRE_DNS_SERVER -C /BinPRE/testdata/dnsmasq.conf -d -i lo
         ;;
+    eip)
+        ./run run taint $BINPRE_EIP_SERVER lo
+        ;;
     *)
-        echo "Usage: $0 [modbus|http|tftp|dnp3|dns]"
+        echo "Usage: $0 [modbus|http|tftp|dnp3|dns|eip]"
         ;;
 esac

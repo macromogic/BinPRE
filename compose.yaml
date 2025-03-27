@@ -12,3 +12,17 @@ services:
       - seccomp=unconfined
     volumes:
       - ./shared:/shared
+  
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dev
+    working_dir: /BinPRE/Artifact_Evaluation/BinPRE_scripts
+    entrypoint: ["/bin/bash", "--init-file", "/dev.init.sh"]
+    stdin_open: true
+    tty: true
+    security_opt:
+      - seccomp=unconfined
+    volumes:
+      - ./shared:/shared
