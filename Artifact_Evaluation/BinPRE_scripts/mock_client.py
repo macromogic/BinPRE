@@ -30,6 +30,8 @@ class Config:
                 return cls(host=host, port=53, udp=True)
             case 'dnp3':
                 return cls(host=host, port=20000)
+            case 'eip':
+                return cls(host=host, port=44818)
             case _:
                 raise ValueError(f"Unknown protocol: {protocol}")
 
