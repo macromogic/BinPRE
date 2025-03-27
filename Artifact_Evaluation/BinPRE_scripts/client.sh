@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -u
-BINPRE_PATH=$(dirname $(dirname $(realpath $0)))
+BINPRE_PATH=$(dirname $(dirname $(dirname $(realpath $0))))
 cd $BINPRE_PATH/Analyzer
 case ${1:-} in
     modbus)
