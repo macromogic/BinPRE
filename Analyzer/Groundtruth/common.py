@@ -170,6 +170,9 @@ class Packet:
 
         return [-1] + syntax, semantic, functions
 
+    def __add__(self, other: 'Packet') -> 'Packet':
+        return Packet(*self.fields, *other.fields)
+
 
 def postprocess(
         gt: Dict[int, Tuple[List[int], Dict[str, str], Dict[str, str]]]
