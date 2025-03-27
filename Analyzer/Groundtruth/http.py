@@ -23,8 +23,6 @@ for _pkt in _packets:
             _http_gt[_i] = Packet(*_fields).parse()
             _i += 1
 
-print(len(_http_gt))
-
 (
     http_Syntax_Groundtruth,
     http_Semantic_Groundtruth,
