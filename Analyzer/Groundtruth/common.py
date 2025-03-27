@@ -169,3 +169,16 @@ class Packet:
         )
 
         return [-1] + syntax, semantic, functions
+
+
+def postprocess(
+        gt: Dict[int, Tuple[List[int], Dict[str, str], Dict[str, str]]]
+) -> Tuple[Dict[int, List[int]], Dict[int, Dict[str, str]], Dict[int, Dict[str, str]]]:
+    syntax = {}
+    semantic = {}
+    functions = {}
+    for i, (syn, sem, fn) in gt.items():
+        syntax[i] = syn
+        semantic[i] = sem
+        functions[i] = fn
+    return syntax, semantic, functions

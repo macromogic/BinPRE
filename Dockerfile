@@ -20,6 +20,11 @@ RUN git clone https://github.com/macromogic/BinPRE.git
 RUN pip install -r /BinPRE/requirements.txt
 RUN cd /BinPRE/src && ./run compile taint
 RUN mkdir -p /pcaps
+RUN echo "\
+cd /BinPRE/src\n\
+git checkout dev\n\
+git pull\n\
+./run compile taint" > /dev.init.sh
 
 ## HTTP
 

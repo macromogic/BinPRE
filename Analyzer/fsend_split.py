@@ -26,13 +26,20 @@ def defined(var):
     return strtobool(os.environ.get(var, '0').lower())
 
 
-def hexdump(data):
+def hexdump(data, limit):
+    if limit > 0 and len(data) > limit:
+        data = data[:limit]
+        truncated = len(data) - limit
+    else:
+        truncated = 0
     result = []
     for i in range(0, len(data), 16):
         s = data[i:i+16]
         hexa = ' '.join([f"{c:02x}" for c in s])
         text = ''.join([chr(c) if 32 <= c < 127 else '.' for c in s])
         result.append(f"{hexa:<48} {text}")
+    if truncated:
+        result.append(f"... ({truncated} more bytes)")
     return '\n'.join(result)
 
 
@@ -131,6 +138,12 @@ def SendInputMsg():
     print("start sending")
     isUDP = False
     proto = sys.argv[1]
+
+    try:
+        verbose_limit = int(os.environ.get('VERBOSE_LIMIT', 256))
+    except ValueError:
+        print("\033[33;1mInvalid value for VERBOSE_LIMIT! Using default value (256)\033[0m")
+        verbose_limit = 256
 
     # argv[2]analysis mode:0, 1
     try:
@@ -235,7 +248,9 @@ def SendInputMsg():
             except IndexError:
                 print("\033[33;1mMessage samples exhausted\033[0m")
                 break
-            print("\n\033[36;1msending\033[0m DATA: {}".format(d))
+            print("\n\033[36;1msending\033[0m DATA: {}".format(
+                d if (verbose_limit < 0 or len(d) <= verbose_limit) else d[:verbose_limit] + '...'
+            ))
             info_before_send_size = config.get_file_size(info_file_path)
             format_before_send_size = config.get_file_size(format_file_path)
             print("info_before_send_size:{}".format(info_before_send_size))
@@ -253,27 +268,8 @@ def SendInputMsg():
                     sock = config.wait_connect(ip, config.port, isUDP)
                     continue
 
-            print("\033[32;1msent\033[0m\n{}".format(hexdump(d))) 
+            print("\033[32;1msent\033[0m\n{}".format(hexdump(d, verbose_limit))) 
 
-
-             
-                
-            # recv_empty_flag = 0
-            # while 1:
-            #     try:            
-            #         recv_content = sock.recv(255)
-            #         print("\033[36;1mrecv\033[0m {}".format(recv_content))
-            #         # break
-            #     except socket.timeout: 
-            #         break
-            #     if(recv_content == b""):
-            #         recv_empty_flag += 1
-            #         time.sleep(1)
-            #     else:
-            #         break
-            #     if(recv_empty_flag >= 10):
-            #         print("\033[31;1mWarning! Multiple recv empty detected.\033[0m")
-            #         break
             recv_content = b''
             reason = '(unknown)'
             num_retries = 10
@@ -291,7 +287,7 @@ def SendInputMsg():
                 reason = f'({num_retries}) retries'
             if not recv_content:
                 print(f"\033[31;1mWarning: No response received after {reason}\033[0m")
-            print("\033[32;1mgot\033[0m\n{}".format(hexdump(recv_content)))
+            print("\033[32;1mgot\033[0m\n{}".format(hexdump(recv_content, verbose_limit)))
 
             time.sleep(config.wait_time)                
             
