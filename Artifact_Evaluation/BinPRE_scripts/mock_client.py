@@ -106,7 +106,7 @@ def main():
         config.port = args.port
 
     payloads = get_payload(pcap_path, config.port, config.udp, args.num_requests)
-    sock = connect(config.ip_port, config.udp, args.timeout, config.bind_port)
+    sock = connect(config.ip_port, config.udp, bind_port=config.bind_port, timeout=args.timeout)
     for i, payload in enumerate(payloads, 1):
         print(f"Sending payload {i}/{len(payloads)} of size {len(payload)}:\n{hexdump(payload, args.verbose_limit)}")
         if config.udp:
