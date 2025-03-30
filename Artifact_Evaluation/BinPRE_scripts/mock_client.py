@@ -40,14 +40,16 @@ class Config:
 def connect(ip_port, udp=False, bind_port=None, timeout=2):
     if udp:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        if bind_port:
-            sock.bind(('', bind_port))
     else:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.settimeout(timeout)
-    sock.connect(ip_port)
-    print(f"Connected to {ip_port}")
+    if udp and bind_port:
+        sock.bind(('', bind_port))
+        print(f"Listening on port {bind_port} for UDP")
+    else:
+        sock.connect(ip_port)
+        print(f"Established {'UDP' if udp else 'TCP'} connection to {ip_port}")
     return sock
 
 
