@@ -11,7 +11,7 @@ case ${1:-} in
         ./run run taint $BINPRE_HTTP_SERVER -r /BinPRE/httpdata/
         ;;
     tftp)
-        ./run run taint $BINPRE_TFTP_SERVER -Ll --secure /BinPRE/testdata/tftp/
+        ./run run taint $BINPRE_TFTP_SERVER -L --secure /BinPRE/testdata/tftp/
         ;;
     dnp3)
         ./run run taint $BINPRE_DNP3_SERVER

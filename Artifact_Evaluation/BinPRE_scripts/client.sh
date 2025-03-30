@@ -11,7 +11,7 @@ case ${1:-} in
         python3 fsend_split.py http 0 0 oa index big 0
         ;;
     tftp)
-        python3 fsend_split.py tftp 0 0 oa index big 0
+        SET_TIMEOUT=10 python3 fsend_split.py tftp 0 0 oa index big 0
         ;;
     dnp3)
         python3 fsend_split.py dnp3 0 0 oa index big 0
