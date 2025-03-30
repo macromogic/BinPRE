@@ -4,13 +4,13 @@ set -u
 DEV_CXXFLAGS=
 DO_PULL=0
 case ${1:-} in
-    --verbose-debug)
+    --verbose-debug|-d)
         DEV_CXXFLAGS="${DEV_CXXFLAGS} -DBINPRE_DEBUG"
         ;;
-    --testhook)
+    --testhook|-t)
         DEV_CXXFLAGS="${DEV_CXXFLAGS} -DTESTHOOK"
         ;;
-    --pull)
+    --pull|-p)
         DO_PULL=1
         ;;
 esac
