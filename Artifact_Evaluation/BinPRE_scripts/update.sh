@@ -8,7 +8,7 @@ case ${1:-} in
         DEV_CXXFLAGS="${DEV_CXXFLAGS} -DBINPRE_DEBUG"
         ;;
     --testhook)
-        DEV_CXXFLAGS="${DEV_CXXFLAGS} -DTEST_HOOK"
+        DEV_CXXFLAGS="${DEV_CXXFLAGS} -DTESTHOOK"
         ;;
     --pull)
         DO_PULL=1
