@@ -49,7 +49,7 @@ ENV BINPRE_DNP3_SERVER="/opendnp3/build/cpp/examples/outstation/outstation-demo"
 
 RUN git clone https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
 RUN make -C /tftp-hpa -j ${NJOBS} && make -C /tftp-hpa install
-ENV BINPRE_TFTP_SERVER="/tftp-hpa/tftpd"
+ENV BINPRE_TFTP_SERVER="/tftp-hpa/tftpd/tftpd"
 
 ## DNS
 

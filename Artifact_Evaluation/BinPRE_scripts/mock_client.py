@@ -12,6 +12,7 @@ class Config:
     port: int
     udp: bool = False
     needs_reconnect: bool = False
+    bind_port: int = None
 
     @property
     def ip_port(self):
@@ -23,7 +24,7 @@ class Config:
             case 'modbus':
                 return cls(host=host, port=502)
             case 'tftp':
-                return cls(host=host, port=69, udp=True)
+                return cls(host=host, port=69, udp=True, bind_port=7788)
             case 'http':
                 return cls(host=host, port=80, needs_reconnect=True)
             case 'dns':
@@ -36,9 +37,11 @@ class Config:
                 raise ValueError(f"Unknown protocol: {protocol}")
 
 
-def connect(ip_port, udp=False, timeout=2):
+def connect(ip_port, udp=False, bind_port=None, timeout=2):
     if udp:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        if bind_port:
+            sock.bind(('', bind_port))
     else:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -67,8 +70,8 @@ def get_payload(pcap_path, port, udp, num_requests):
 
 def hexdump(data, limit):
     if limit > 0 and len(data) > limit:
-        data = data[:limit]
         truncated = len(data) - limit
+        data = data[:limit]
     else:
         truncated = 0
     result = []

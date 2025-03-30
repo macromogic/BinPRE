@@ -11,9 +11,7 @@ case ${1:-} in
         ./run run taint $BINPRE_HTTP_SERVER -r /BinPRE/httpdata/
         ;;
     tftp)
-        echo TFTP not supported yet
-        exit 1
-        # ./run run taint $BINPRE_TFTP_SERVER
+        ./run run taint $BINPRE_TFTP_SERVER -Ll --secure /BinPRE/testdata/tftp/
         ;;
     dnp3)
         ./run run taint $BINPRE_DNP3_SERVER
