@@ -17,7 +17,7 @@ _dnp3_common_fields = [
     Field.checksum(2),  # Data link header checksum
     Field.integer(1),  # Transport control
     Field.integer(1),  # Application control
-    Field.integer(1),  # Function code
+    Field.command(1),  # Function code
     ...,
     Field.checksum(2),  # Application data checksum
 ]
