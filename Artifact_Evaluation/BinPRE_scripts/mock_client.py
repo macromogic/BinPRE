@@ -12,6 +12,7 @@ class Config:
     port: int
     udp: bool = False
     needs_reconnect: bool = False
+    bind_port: int = None
 
     @property
     def ip_port(self):
@@ -23,7 +24,7 @@ class Config:
             case 'modbus':
                 return cls(host=host, port=502)
             case 'tftp':
-                return cls(host=host, port=69, udp=True)
+                return cls(host=host, port=69, udp=True, bind_port=7788)
             case 'http':
                 return cls(host=host, port=80, needs_reconnect=True)
             case 'dns':
@@ -36,15 +37,19 @@ class Config:
                 raise ValueError(f"Unknown protocol: {protocol}")
 
 
-def connect(ip_port, udp=False, timeout=2):
+def connect(ip_port, udp=False, bind_port=None, timeout=2):
     if udp:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     else:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.settimeout(timeout)
-    sock.connect(ip_port)
-    print(f"Connected to {ip_port}")
+    if udp and bind_port:
+        sock.bind(('', bind_port))
+        print(f"Listening on port {bind_port} for UDP")
+    else:
+        sock.connect(ip_port)
+        print(f"Established {'UDP' if udp else 'TCP'} connection to {ip_port}")
     return sock
 
 
@@ -67,8 +72,8 @@ def get_payload(pcap_path, port, udp, num_requests):
 
 def hexdump(data, limit):
     if limit > 0 and len(data) > limit:
-        data = data[:limit]
         truncated = len(data) - limit
+        data = data[:limit]
     else:
         truncated = 0
     result = []
@@ -103,7 +108,7 @@ def main():
         config.port = args.port
 
     payloads = get_payload(pcap_path, config.port, config.udp, args.num_requests)
-    sock = connect(config.ip_port, config.udp, args.timeout)
+    sock = connect(config.ip_port, config.udp, bind_port=config.bind_port, timeout=args.timeout)
     for i, payload in enumerate(payloads, 1):
         print(f"Sending payload {i}/{len(payloads)} of size {len(payload)}:\n{hexdump(payload, args.verbose_limit)}")
         if config.udp:

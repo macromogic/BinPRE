@@ -23,7 +23,7 @@ restartFlag = int(sys.argv[7])
 threshold = 0.8
 
 isUDP = False
-settimeout = 5
+settimeout = int(os.environ.get('SET_TIMEOUT', 5))
 sendtimedelay = 0.2
 text_flag = 0
 wait_time = 5

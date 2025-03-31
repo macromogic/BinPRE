@@ -11,7 +11,7 @@ services:
     security_opt:
       - seccomp=unconfined
     volumes:
-      - ./shared:/shared
+      - ./shared:/shared:rw
   
   dev:
     build:
@@ -25,4 +25,4 @@ services:
     security_opt:
       - seccomp=unconfined
     volumes:
-      - ./shared:/shared
+      - ./shared:/shared:rw

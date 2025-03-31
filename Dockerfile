@@ -6,6 +6,19 @@ RUN apt update && apt install -y \
 build-essential make gcc g++ cmake \
 git vim net-tools wget tar tcpdump less strace \
 libcap-dev
+RUN echo <<EOF > /root/.vimrc
+set nocompatible
+syntax on
+set number
+set mouse=a
+set autoindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set smarttab
+set smartindent
+set hlsearch
+EOF
 
 ## Pin
 
@@ -49,30 +62,31 @@ ENV BINPRE_DNP3_SERVER="/opendnp3/build/cpp/examples/outstation/outstation-demo"
 
 RUN git clone https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
 RUN make -C /tftp-hpa -j ${NJOBS} && make -C /tftp-hpa install
-ENV BINPRE_TFTP_SERVER="/tftp-hpa/tftpd"
+ENV BINPRE_TFTP_SERVER="/tftp-hpa/tftpd/tftpd"
 
 ## DNS
 
 RUN git clone https://github.com/infinet/dnsmasq.git
 RUN make -C /dnsmasq -j ${NJOBS}
-RUN echo "\
-domain-needed\n\
-bogus-priv\n\
-filterwin2k\n\
-localise-queries\n\
-listen-address=10.1.0.1\n\
-dhcp-range=lan.hzsogood.net,10.1.0.100,10.1.0.250,255.255.255.0,12h\n\
-local=/lan.hzsogood.net/\n\
-domain=lan.hzsogood.net\n\
-expand-hosts\n\
-no-negcache\n\
-resolv-file=/etc/resolv.conf\n\
-dhcp-authoritative\n\
-dhcp-leasefile=/etc/dhcp.leases\n\
-read-ethers\n\
-dhcp-host=00:14:A4:60:73:66,kong,infinite\n\
-dhcp-host=00:1d:d9:45:1f:8a,theharlequin,infinite\n\
-dhcp-host=00:01:e6:4e:64:47,printer,infinite" > /dnsmasq.conf
+RUN echo <<EOF > /dnsmasq.conf
+domain-needed
+bogus-priv
+filterwin2k
+localise-queries
+listen-address=10.1.0.1
+dhcp-range=lan.hzsogood.net,10.1.0.100,10.1.0.250,255.255.255.0,12h
+local=/lan.hzsogood.net/
+domain=lan.hzsogood.net
+expand-hosts
+no-negcache
+resolv-file=/etc/resolv.conf
+dhcp-authoritative
+dhcp-leasefile=/etc/dhcp.leases
+read-ethers
+dhcp-host=00:14:A4:60:73:66,kong,infinite
+dhcp-host=00:1d:d9:45:1f:8a,theharlequin,infinite
+dhcp-host=00:01:e6:4e:64:47,printer,infinite
+EOF
 ENV BINPRE_DNS_SERVER="/dnsmasq/src/dnsmasq"
 
 WORKDIR /BinPRE/Artifact_Evaluation/BinPRE_scripts

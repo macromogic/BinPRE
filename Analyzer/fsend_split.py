@@ -28,8 +28,8 @@ def defined(var):
 
 def hexdump(data, limit):
     if limit > 0 and len(data) > limit:
-        data = data[:limit]
         truncated = len(data) - limit
+        data = data[:limit]
     else:
         truncated = 0
     result = []

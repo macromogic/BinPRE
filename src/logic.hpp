@@ -258,6 +258,10 @@ void recvfrom_point(const char *point, int socket, uint64_t buffer, size_t lengt
         if (TaintEngine::isTainted(REG_RDX)) { // log if size is tainted
             logger::info("LENGTH\t%s\n", TaintEngine::offsets(REG_RDX));
         }
+        // Weijie: seems like this was missing
+        logger::info("recvfrom_point taint\n");//
+        /*Tag Taint */
+        TaintEngine::Init(_buffer, ret);
     }
 }
 
