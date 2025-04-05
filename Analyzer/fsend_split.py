@@ -249,7 +249,7 @@ def SendInputMsg():
                 print("\033[33;1mMessage samples exhausted\033[0m")
                 break
             print("\n\033[36;1msending\033[0m DATA: {}".format(
-                d if (verbose_limit < 0 or len(d) <= verbose_limit) else d[:verbose_limit] + '...'
+                d if (verbose_limit < 0 or len(d) <= verbose_limit) else str(d[:verbose_limit]) + '...'
             ))
             info_before_send_size = config.get_file_size(info_file_path)
             format_before_send_size = config.get_file_size(format_file_path)
