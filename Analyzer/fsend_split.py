@@ -172,9 +172,8 @@ def SendInputMsg():
 
     '''Configuration information for the protocol port number. Modify or add as you need.'''
     if proto == "dnp3":
-        port = 4999
-        config.port = port
         port = 20000
+        config.port = port
     elif proto == "eip" or proto == "cip":
         port = 44818
         config.port = port
