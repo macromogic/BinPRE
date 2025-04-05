@@ -1,0 +1,39 @@
+FROM binpre_testbench:latest
+
+WORKDIR /
+RUN apt install -y telnet
+RUN <<EOR
+cd /BinPRE/src
+git checkout dev
+git pull
+./run compile taint
+EOR
+
+## Mirai
+RUN wget https://go.dev/dl/go1.24.2.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.24.2.linux-amd64.tar.gz
+ENV GOROOT=/usr/local/go
+ENV GOPATH=/go
+ENV PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+RUN rm /go1.24.2.linux-amd64.tar.gz
+
+RUN git clone https://github.com/jgamblin/Mirai-Source-Code.git
+RUN <<EOR
+set -e
+cd /BinPRE
+git pull
+cd /Mirai-Source-Code
+git apply /BinPRE/testdata/mirai.patch
+cd mirai
+go mod init mirai
+go get -u github.com/go-sql-driver/mysql github.com/mattn/go-shellwords
+go mod tidy
+mkdir -p debug
+./build.sh debug telnet
+service mariadb start
+mysql -uroot < ../scripts/db.sql
+cd ../loader
+./build.sh
+EOR
+
+WORKDIR /Mirai-Source-Code/mirai

