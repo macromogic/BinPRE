@@ -6,7 +6,7 @@ container. Or refer to `compose.yml` for execution options.
 ## Setup
 
 ``` bash
-docker-compose up -d --build
+docker-compose up -d --build testbench
 ```
 
 ## Connect to the container
