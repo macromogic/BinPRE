@@ -25,5 +25,3 @@ services:
       - seccomp=unconfined
     volumes:
       - ./shared:/shared:rw
-    depends_on:
-      - testbench

