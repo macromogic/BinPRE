@@ -22,7 +22,9 @@ case ${1:-} in
     eip)
         ./run run taint $BINPRE_EIP_SERVER lo
         ;;
+    mirai)
+        ./run run taint $BINPRE_MIRAI_SERVER
     *)
-        echo "Usage: $0 [modbus|http|tftp|dnp3|dns|eip]"
+        echo "Usage: $0 [modbus|http|tftp|dnp3|dns|eip|mirai]"
         ;;
 esac

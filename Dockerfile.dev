@@ -40,5 +40,6 @@ service mariadb restart
 netstat -tuln | grep '0.0.0.0:55' || /dnsmasq/src/dnsmasq -C /dnsmasq.conf -i lo -p 55
 EOT
 RUN chmod +x /Mirai-Source-Code/mirai/init.sh
+ENV BINPRE_MIRAI_SERVER=/Mirai-Source-Code/mirai/debug/mirai.dbg
 
 WORKDIR /Mirai-Source-Code/mirai
