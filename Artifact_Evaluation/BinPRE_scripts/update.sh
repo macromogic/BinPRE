@@ -4,14 +4,20 @@ set -u
 DEV_CXXFLAGS=
 DO_PULL=0
 case ${1:-} in
-    --verbose-debug|-d)
-        DEV_CXXFLAGS="${DEV_CXXFLAGS} -DBINPRE_DEBUG"
+    --pull|-p)
+        DO_PULL=1
         ;;
     --testhook|-t)
         DEV_CXXFLAGS="${DEV_CXXFLAGS} -DTESTHOOK"
         ;;
-    --pull|-p)
-        DO_PULL=1
+    --verbose-debug|-d)
+        DEV_CXXFLAGS="${DEV_CXXFLAGS} -DBINPRE_DEBUG"
+        ;;
+    *)
+        echo "Usage: $0 [--pull|-p] [--testhook|-t] [--verbose-debug|-d]"
+        echo "  --pull|-p:           Pull the latest changes from the repository"
+        echo "  --testhook|-t:       Build with -DTESTHOOK"
+        echo "  --verbose-debug|-d:  Build with -DBINPRE_DEBUG"
         ;;
 esac
 

@@ -37,9 +37,6 @@ Under `/BinPRE/Artifact_Evaluation/BinPRE_scripts` you will find
 Inside the container:
 
 ``` bash
-cd /BinPRE/src
-git pull
-./run compile taint
-cd /BinPRE/Artifact_Evaluation/BinPRE_scripts
+./update.sh # use -p to pull from remote before building
 ```
 

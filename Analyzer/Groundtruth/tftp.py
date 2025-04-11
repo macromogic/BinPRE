@@ -38,7 +38,7 @@ _tftp_string_fields = [
 ]
 
 _tftp_gt = {
-    i: Packet(*_tftp_common_fields).parse(None, list(map(lambda s: len(s)+1, sf)))
+    i: Packet(*_tftp_common_fields).parse(list(map(lambda s: len(s)+1, sf)))
     for i, sf in enumerate(_tftp_string_fields)
 }
 
