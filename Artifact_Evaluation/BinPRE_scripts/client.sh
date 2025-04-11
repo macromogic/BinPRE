@@ -26,6 +26,7 @@ case ${1:-} in
         service mariadb restart
         netstat -tuln | grep '0.0.0.0:55' || /dnsmasq/src/dnsmasq -C /dnsmasq.conf -i lo -p 55
         python3 fsend_split.py mirai 0 0 oa index big 0
+        ;;
     *)
         echo "Usage: $0 [modbus|http|tftp|dnp3|dns|eip|mirai]"
         ;;

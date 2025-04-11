@@ -24,6 +24,7 @@ case ${1:-} in
         ;;
     mirai)
         ./run run taint $BINPRE_MIRAI_SERVER
+        ;;
     *)
         echo "Usage: $0 [modbus|http|tftp|dnp3|dns|eip|mirai]"
         ;;
