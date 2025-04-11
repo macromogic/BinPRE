@@ -12,6 +12,10 @@
 std::vector<std::vector<std::string> > functraces;
 std::vector<int> threadIds;
 
+static inline bool is_simd(REG reg) {
+    return reg >= REG::REG_MM_BASE;
+}
+
 
 void printTrace(int index) {
     std::vector<std::string>::iterator it;
@@ -452,7 +456,7 @@ void deleteMem(int threadId, const std::string* assembly, unsigned long address,
 
 // ReadMem callback functions is inserted
 void InsertCall(Ins ins, REG reg, int mem) {
-    if (REG_Size(reg) > sizeof(ADDRINT)) {
+    if (is_simd(reg)) {
         fprintf(stderr, "Skipping ReadMem with write reg %s\n", REG_StringShort(reg).c_str());
         return;
     }
@@ -469,7 +473,7 @@ void InsertCall(Ins ins, REG reg, int mem) {
 
 // WriteMem callback functions is inserted
 void InsertCall(Ins ins, int mem, REG reg) {
-    if (REG_Size(reg) > sizeof(ADDRINT)) {
+    if (is_simd(reg)) {
         fprintf(stderr, "Skipping WriteMem with read reg %s\n", REG_StringShort(reg).c_str());
         return;
     }
@@ -499,11 +503,11 @@ void InsertCall(Ins ins, int mem_w, int mem_r) {
 
 // spreadReg callback functions is inserted
 void InsertCall(Ins ins, REG reg_w, REG reg_r) {
-    if (REG_Size(reg_w) > sizeof(ADDRINT)) {
+    if (is_simd(reg_w)) {
         fprintf(stderr, "Skipping spreadReg with write reg %s\n", REG_StringShort(reg_w).c_str());
         return;
     }
-    if (REG_Size(reg_r) > sizeof(ADDRINT)) {
+    if (is_simd(reg_r)) {
         fprintf(stderr, "Skipping spreadReg with read reg %s\n", REG_StringShort(reg_r).c_str());
         return;
     }
@@ -620,11 +624,11 @@ void Op3RegReg_cmp(int threadId, const std::string* assembly, const std::string*
 }
 
 void InsertCallExtra(Ins ins, REG reg_w, REG reg_r) { // Reg Reg
-    if (REG_Size(reg_w) > sizeof(ADDRINT)) {
+    if (is_simd(reg_w)) {
         fprintf(stderr, "Skipping Op3RegReg with write reg %s\n", REG_StringShort(reg_w).c_str());
         return;
     }
-    if (REG_Size(reg_r) > sizeof(ADDRINT)) {
+    if (is_simd(reg_r)) {
         fprintf(stderr, "Skipping Op3RegReg with read reg %s\n", REG_StringShort(reg_r).c_str());
         return;
     }
@@ -640,11 +644,11 @@ void InsertCallExtra(Ins ins, REG reg_w, REG reg_r) { // Reg Reg
     IARG_END);
 }
 void InsertCallExtra_cmp(Ins ins, REG reg_w, REG reg_r) { // Reg Reg
-    if (REG_Size(reg_w) > sizeof(ADDRINT)) {
+    if (is_simd(reg_w)) {
         fprintf(stderr, "Skipping Op3RegReg_cmp with write reg %s\n", REG_StringShort(reg_w).c_str());
         return;
     }
-    if (REG_Size(reg_r) > sizeof(ADDRINT)) {
+    if (is_simd(reg_r)) {
         fprintf(stderr, "Skipping Op3RegReg_cmp with read reg %s\n", REG_StringShort(reg_r).c_str());
         return;
     }
@@ -708,7 +712,7 @@ void Op3RegImm_cmp(int threadId, const std::string* assembly, const std::string*
 }
 
 void InsertCallExtra(Ins ins, REG reg) { // Reg Imm
-    if (REG_Size(reg) > sizeof(ADDRINT)) {
+    if (is_simd(reg)) {
         fprintf(stderr, "Skipping Op3RegImm with read reg %s\n", REG_StringShort(reg).c_str());
         return;
     }
@@ -723,7 +727,7 @@ void InsertCallExtra(Ins ins, REG reg) { // Reg Imm
     IARG_END);
 }
 void InsertCallExtra_cmp(Ins ins, REG reg) { // Reg Imm
-    if (REG_Size(reg) > sizeof(ADDRINT)) {
+    if (is_simd(reg)) {
         fprintf(stderr, "Skipping Op3RegImm_cmp with read reg %s\n", REG_StringShort(reg).c_str());
         return;
     }
@@ -804,7 +808,7 @@ void Op3RegMem_cmp(int threadId, const std::string* assembly, const std::string*
 }
 
 void InsertCallExtra(Ins ins, REG reg, int mem) { // Reg Mem
-    if (REG_Size(reg) > sizeof(ADDRINT)) {
+    if (is_simd(reg)) {
         fprintf(stderr, "Skipping Op3RegMem with write reg %s\n", REG_StringShort(reg).c_str());
         return;
     }
@@ -820,7 +824,7 @@ void InsertCallExtra(Ins ins, REG reg, int mem) { // Reg Mem
     IARG_END);
 }
 void InsertCallExtra_cmp(Ins ins, REG reg, int mem) { // Reg Mem
-    if (REG_Size(reg) > sizeof(ADDRINT)) {
+    if (is_simd(reg)) {
         fprintf(stderr, "Skipping Op3RegMem_cmp with write reg %s\n", REG_StringShort(reg).c_str());
         return;
     }
@@ -907,7 +911,7 @@ void Op3MemReg_cmp(int threadId, const std::string* assembly, const std::string*
 }
 
 void InsertCallExtra(Ins ins, int mem, REG reg) { // Mem Reg
-    if (REG_Size(reg) > sizeof(ADDRINT)) {
+    if (is_simd(reg)) {
         fprintf(stderr, "Skipping Op3MemReg with read reg %s\n", REG_StringShort(reg).c_str());
         return;
     }
@@ -923,7 +927,7 @@ void InsertCallExtra(Ins ins, int mem, REG reg) { // Mem Reg
     IARG_END);
 }
 void InsertCallExtra_cmp(Ins ins, int mem, REG reg) { // Mem Reg
-    if (REG_Size(reg) > sizeof(ADDRINT)) {
+    if (is_simd(reg)) {
         fprintf(stderr, "Skipping Op3MemReg_cmp with read reg %s\n", REG_StringShort(reg).c_str());
         return;
     }
