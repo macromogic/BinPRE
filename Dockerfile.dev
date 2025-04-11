@@ -33,14 +33,11 @@ mkdir -p debug
 ./build.sh debug telnet
 service mariadb start
 mysql -uroot < ../scripts/db.sql
-cd ../loader
-./build.sh
 EOR
 COPY <<EOT /Mirai-Source-Code/mirai/init.sh
 #!/bin/bash
 service mariadb restart
 netstat -tuln | grep '0.0.0.0:55' || /dnsmasq/src/dnsmasq -C /dnsmasq.conf -i lo -p 55
-nohup /Mirai-Source-Code/mirai/debug/cnc &
 EOT
 RUN chmod +x /Mirai-Source-Code/mirai/init.sh
 
