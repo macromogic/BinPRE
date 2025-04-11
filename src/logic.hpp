@@ -452,6 +452,10 @@ void deleteMem(int threadId, const std::string* assembly, unsigned long address,
 
 // ReadMem callback functions is inserted
 void InsertCall(Ins ins, REG reg, int mem) {
+    if (REG_Size(reg) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping ReadMem with write reg %s\n", REG_StringShort(reg).c_str());
+        return;
+    }
     const std::string *insName = new std::string(ins.Name());
     INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)ReadMem, 
         IARG_THREAD_ID,
@@ -495,6 +499,14 @@ void InsertCall(Ins ins, int mem_w, int mem_r) {
 
 // spreadReg callback functions is inserted
 void InsertCall(Ins ins, REG reg_w, REG reg_r) {
+    if (REG_Size(reg_w) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping spreadReg with write reg %s\n", REG_StringShort(reg_w).c_str());
+        return;
+    }
+    if (REG_Size(reg_r) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping spreadReg with read reg %s\n", REG_StringShort(reg_r).c_str());
+        return;
+    }
     const std::string *insName = new std::string(ins.Name());
     INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)spreadReg,
         IARG_THREAD_ID,
@@ -628,6 +640,14 @@ void InsertCallExtra(Ins ins, REG reg_w, REG reg_r) { // Reg Reg
     IARG_END);
 }
 void InsertCallExtra_cmp(Ins ins, REG reg_w, REG reg_r) { // Reg Reg
+    if (REG_Size(reg_w) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping Op3RegReg_cmp with write reg %s\n", REG_StringShort(reg_w).c_str());
+        return;
+    }
+    if (REG_Size(reg_r) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping Op3RegReg_cmp with read reg %s\n", REG_StringShort(reg_r).c_str());
+        return;
+    }
     const std::string *insName = new std::string(ins.Name());
     Ins next_ins = INS_Next(ins);
     const std::string *next_insName = new std::string(next_ins.Name());
@@ -688,6 +708,10 @@ void Op3RegImm_cmp(int threadId, const std::string* assembly, const std::string*
 }
 
 void InsertCallExtra(Ins ins, REG reg) { // Reg Imm
+    if (REG_Size(reg) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping Op3RegImm with read reg %s\n", REG_StringShort(reg).c_str());
+        return;
+    }
     const std::string *insName = new std::string(ins.Name());
     INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)Op3RegImm,
         IARG_THREAD_ID,
@@ -699,6 +723,10 @@ void InsertCallExtra(Ins ins, REG reg) { // Reg Imm
     IARG_END);
 }
 void InsertCallExtra_cmp(Ins ins, REG reg) { // Reg Imm
+    if (REG_Size(reg) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping Op3RegImm_cmp with read reg %s\n", REG_StringShort(reg).c_str());
+        return;
+    }
     const std::string *insName = new std::string(ins.Name());
     Ins next_ins = INS_Next(ins);
     const std::string *next_insName = new std::string(next_ins.Name());
@@ -776,6 +804,10 @@ void Op3RegMem_cmp(int threadId, const std::string* assembly, const std::string*
 }
 
 void InsertCallExtra(Ins ins, REG reg, int mem) { // Reg Mem
+    if (REG_Size(reg) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping Op3RegMem with write reg %s\n", REG_StringShort(reg).c_str());
+        return;
+    }
     const std::string *insName = new std::string(ins.Name());
     INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)Op3RegMem,
         IARG_THREAD_ID,
@@ -788,6 +820,10 @@ void InsertCallExtra(Ins ins, REG reg, int mem) { // Reg Mem
     IARG_END);
 }
 void InsertCallExtra_cmp(Ins ins, REG reg, int mem) { // Reg Mem
+    if (REG_Size(reg) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping Op3RegMem_cmp with write reg %s\n", REG_StringShort(reg).c_str());
+        return;
+    }
     const std::string *insName = new std::string(ins.Name());
     Ins next_ins = INS_Next(ins);
     const std::string *next_insName = new std::string(next_ins.Name());
@@ -871,6 +907,10 @@ void Op3MemReg_cmp(int threadId, const std::string* assembly, const std::string*
 }
 
 void InsertCallExtra(Ins ins, int mem, REG reg) { // Mem Reg
+    if (REG_Size(reg) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping Op3MemReg with read reg %s\n", REG_StringShort(reg).c_str());
+        return;
+    }
     const std::string *insName = new std::string(ins.Name());
     INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)Op3MemReg,
         IARG_THREAD_ID,
@@ -883,6 +923,10 @@ void InsertCallExtra(Ins ins, int mem, REG reg) { // Mem Reg
     IARG_END);
 }
 void InsertCallExtra_cmp(Ins ins, int mem, REG reg) { // Mem Reg
+    if (REG_Size(reg) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping Op3MemReg_cmp with read reg %s\n", REG_StringShort(reg).c_str());
+        return;
+    }
     const std::string *insName = new std::string(ins.Name());
     Ins next_ins = INS_Next(ins);
     const std::string *next_insName = new std::string(next_ins.Name());
