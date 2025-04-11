@@ -9,3 +9,4 @@ from .dns import *
 from .dnp3 import *
 from .http import *
 from .tftp import *
+from .mirai import *

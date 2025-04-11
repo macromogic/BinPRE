@@ -33,6 +33,8 @@ class Config:
                 return cls(host=host, port=20000)
             case 'eip':
                 return cls(host=host, port=44818)
+            case 'mirai':
+                return cls(host=host, port=43608, bind_port=23)
             case _:
                 raise ValueError(f"Unknown protocol: {protocol}")
 
@@ -44,9 +46,9 @@ def connect(ip_port, udp=False, bind_port=None, timeout=2):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.settimeout(timeout)
-    if udp and bind_port:
+    if bind_port:
         sock.bind(('', bind_port))
-        print(f"Listening on port {bind_port} for UDP")
+        print(f"Listening on port {bind_port} for {'UDP' if udp else 'TCP'}")
     else:
         sock.connect(ip_port)
         print(f"Established {'UDP' if udp else 'TCP'} connection to {ip_port}")
@@ -116,7 +118,7 @@ def main():
         else:
             sock.send(payload)
         response = b''
-        reason = '(unknown)'
+        reason = f'max retries ({args.num_retries})'
         for _ in range(args.num_retries):
             try:
                 if response := sock.recv(255):
@@ -127,8 +129,6 @@ def main():
                 reason = 'timeout'
                 break
             time.sleep(0.5)
-        else:
-            reason = f'max retries ({args.num_retries})'
         if response:
             print(f"Received response of size {len(response)}:\n{hexdump(response, args.verbose_limit)}")
         else:

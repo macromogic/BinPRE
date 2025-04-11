@@ -22,6 +22,7 @@ RUN <<EOR
 set -e
 cd /BinPRE
 git pull
+
 cd /Mirai-Source-Code
 git apply /BinPRE/testdata/mirai.patch
 cd mirai
