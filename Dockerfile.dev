@@ -30,16 +30,11 @@ go mod init mirai
 go get -u github.com/go-sql-driver/mysql github.com/mattn/go-shellwords
 go mod tidy
 mkdir -p debug
+
 ./build.sh debug telnet
 service mariadb start
 mysql -uroot < ../scripts/db.sql
 EOR
-COPY <<EOT /Mirai-Source-Code/mirai/init.sh
-#!/bin/bash
-service mariadb restart
-netstat -tuln | grep '0.0.0.0:55' || /dnsmasq/src/dnsmasq -C /dnsmasq.conf -i lo -p 55
-EOT
-RUN chmod +x /Mirai-Source-Code/mirai/init.sh
 ENV BINPRE_MIRAI_SERVER=/Mirai-Source-Code/mirai/debug/mirai.dbg
 
 WORKDIR /BinPRE/Artifact_Evaluation/BinPRE_scripts

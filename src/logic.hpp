@@ -465,6 +465,10 @@ void InsertCall(Ins ins, REG reg, int mem) {
 
 // WriteMem callback functions is inserted
 void InsertCall(Ins ins, int mem, REG reg) {
+    if (REG_Size(reg) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping WriteMem with input reg %s\n", REG_StringShort(reg).c_str());
+        return;
+    }
     const std::string *insName = new std::string(ins.Name());
 
     INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)WriteMem, 
