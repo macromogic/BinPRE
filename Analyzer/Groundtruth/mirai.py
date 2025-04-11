@@ -12,7 +12,7 @@ _mirai_fields = [
     [
         Field.length(2),  # Length
         Field.integer(4),  # Duration
-        Field.integer(1),  # Type
+        Field.command(1),  # Type
         Field.length(1),  # Target count
         ...,  # Targets
         Field.length(1),  # Opt count
