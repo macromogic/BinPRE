@@ -4,7 +4,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG NJOBS=8
 RUN apt update && apt install -y \
 build-essential make gcc g++ cmake git vim \
-net-tools wget tar tcpdump less strace dnsutils \
+net-tools wget tar tcpdump less strace dnsutils telnet \
 libcap-dev mariadb-server mariadb-client
 COPY <<EOT /root/.vimrc
 set nocompatible
@@ -84,3 +84,32 @@ dhcp-host=00:01:e6:4e:64:47,printer,infinite
 user=root
 EOT
 ENV BINPRE_DNS_SERVER="/dnsmasq/src/dnsmasq"
+
+## Mirai
+
+RUN wget https://go.dev/dl/go1.24.2.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.24.2.linux-amd64.tar.gz
+ENV GOROOT=/usr/local/go
+ENV GOPATH=/go
+ENV PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+RUN rm /go1.24.2.linux-amd64.tar.gz
+
+RUN git clone https://github.com/jgamblin/Mirai-Source-Code.git
+RUN <<EOR
+set -e
+cd /BinPRE
+git pull
+
+cd /Mirai-Source-Code
+git apply /BinPRE/testdata/mirai.patch
+cd mirai
+go mod init mirai
+go get -u github.com/go-sql-driver/mysql github.com/mattn/go-shellwords
+go mod tidy
+mkdir -p debug
+
+./build.sh debug telnet
+service mariadb start
+mysql -uroot < ../scripts/db.sql
+EOR
+ENV BINPRE_MIRAI_SERVER=/Mirai-Source-Code/mirai/debug/mirai.dbg
