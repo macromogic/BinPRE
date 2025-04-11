@@ -76,7 +76,7 @@ def get_payload(pcap_path, port, udp, num_requests):
     return payloads
 
 
-def hexdump(data, limit):
+def hexdump(data, limit=-1):
     if limit > 0 and len(data) > limit:
         truncated = len(data) - limit
         data = data[:limit]
@@ -126,8 +126,10 @@ def main():
         for _ in range(args.num_retries):
             try:
                 if response := sock.recv(255):
+                    print(hexdump(response))
                     while chunk := sock.recv(255):
                         response += chunk
+                        print(hexdump(chunk))
                     break
             except socket.timeout:
                 reason = 'timeout'
