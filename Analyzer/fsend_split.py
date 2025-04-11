@@ -201,6 +201,9 @@ def SendInputMsg():
     elif proto == "smb2":
         port = 445
         config.port = port
+    elif proto == 'mirai':
+        port = 43608  # for filtering packets
+        config.port = port
     elif proto =="unknown":
         port = config.port
     

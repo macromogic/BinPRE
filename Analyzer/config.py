@@ -85,12 +85,17 @@ def connect(ip, port, isUDP):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-    sock.settimeout(settimeout)
     try:
         if protocol_name == "tftp":
             sock.bind(('', 7788))
+        elif protocol_name == "mirai":
+            sock.bind(('', 23))
+            sock.listen()
+            sock, _ = sock.accept()
         else:
             sock.connect((ip, port))#normal
+
+        sock.settimeout(settimeout)
         
         print("The connection is successful!")
         return sock

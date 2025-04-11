@@ -45,7 +45,6 @@ def connect(ip_port, udp=False, bind_port=None, timeout=2):
     else:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    sock.settimeout(timeout)
     if bind_port:
         sock.bind(('', bind_port))
         print(f"Listening on port {bind_port} for {'UDP' if udp else 'TCP'}")
@@ -56,6 +55,7 @@ def connect(ip_port, udp=False, bind_port=None, timeout=2):
     else:
         sock.connect(ip_port)
         print(f"Established {'UDP' if udp else 'TCP'} connection to {ip_port}")
+    sock.settimeout(timeout)
     return sock
 
 
@@ -103,6 +103,7 @@ def main():
     parser.add_argument('--input', '-i', type=Path)
     parser.add_argument('--num-retries', '-r', type=int, default=10)
     parser.add_argument('--verbose-limit', '-l', type=int, default=256)
+    parser.add_argument('--no-response', '-nore', action='store_true')
     args = parser.parse_args()
 
     protocol = args.protocol.lower()
@@ -138,7 +139,10 @@ def main():
         if response:
             print(f"Received response of size {len(response)}:\n{hexdump(response, args.verbose_limit)}")
         else:
-            raise RuntimeError(f"No response received after {reason}")
+            if args.no_response:
+                print(f"No response received after {reason}")
+            else:
+                raise RuntimeError(f"No response received after {reason}")
         if config.needs_reconnect:
             sock.close()
             sock = connect(config.ip_port, config.udp, args.timeout)
