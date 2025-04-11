@@ -466,7 +466,7 @@ void InsertCall(Ins ins, REG reg, int mem) {
 // WriteMem callback functions is inserted
 void InsertCall(Ins ins, int mem, REG reg) {
     if (REG_Size(reg) > sizeof(ADDRINT)) {
-        fprintf(stderr, "Skipping WriteMem with input reg %s\n", REG_StringShort(reg).c_str());
+        fprintf(stderr, "Skipping WriteMem with read reg %s\n", REG_StringShort(reg).c_str());
         return;
     }
     const std::string *insName = new std::string(ins.Name());
@@ -608,6 +608,14 @@ void Op3RegReg_cmp(int threadId, const std::string* assembly, const std::string*
 }
 
 void InsertCallExtra(Ins ins, REG reg_w, REG reg_r) { // Reg Reg
+    if (REG_Size(reg_w) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping Op3RegReg with write reg %s\n", REG_StringShort(reg_w).c_str());
+        return;
+    }
+    if (REG_Size(reg_r) > sizeof(ADDRINT)) {
+        fprintf(stderr, "Skipping Op3RegReg with read reg %s\n", REG_StringShort(reg_r).c_str());
+        return;
+    }
     const std::string *insName = new std::string(ins.Name());
     INS_InsertPredicatedCall(ins, IPOINT_BEFORE, (AFUNPTR)Op3RegReg, 
         IARG_THREAD_ID,
