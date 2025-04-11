@@ -50,6 +50,8 @@ Evaluation_Res = f"../BinPRE_Res/{pcap_name}/{pcap_name}_eval.txt"
 Evaluation_bo_Res = f"../BinPRE_Res/{pcap_name}/{pcap_name}_bo_eval.txt"
 Boofuzz_oa_Res = f"../BinPRE_Res/{pcap_name}/{pcap_name}_boofuzz_oa.txt"
 Boofuzz_bo_Res = f"../BinPRE_Res/{pcap_name}/{pcap_name}_boofuzz_bo.txt"
+if not os.path.exists(f"../BinPRE_Res/{pcap_name}"):
+    os.makedirs(f"../BinPRE_Res/{pcap_name}", exist_ok=True)
 
 
 baseline_mode = ""
