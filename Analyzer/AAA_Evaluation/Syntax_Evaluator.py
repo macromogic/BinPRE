@@ -179,7 +179,10 @@ def BinPREEvaluator(payload_message, Pre_message_Result, message_Result, command
     Average_Pre = msg_Pre/len(payload_message)
     Average_Rec = msg_Rec/len(payload_message)
     Average_Perf = msg_Perf/len(payload_message)
-    F1_score = 2 * Average_Pre * Average_Rec / (Average_Pre + Average_Rec)
+    try:
+        F1_score = 2 * Average_Pre * Average_Rec / (Average_Pre + Average_Rec)
+    except ArithmeticError:
+        F1_score = 0
 
 
     print(f"Average_Accr:{Average_Accr}")

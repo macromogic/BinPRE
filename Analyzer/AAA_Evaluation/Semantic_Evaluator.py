@@ -27,8 +27,8 @@ def metrix_Cal(msg_semanticTruth,msg_Res, msg_fields, msg_len):
     print(f"correct_format_inferred_correct_semantic:{correct_format_inferred_correct_semantic}")
     print(f"\ncorrect_format_inferred_semantic:{correct_format_inferred_semantic}")
     print(f"correct_format:{correct_format}")
-    semantic_pre = correct_format_inferred_correct_semantic/correct_format_inferred_semantic
-    semantic_rec = correct_format_inferred_correct_semantic/correct_format
+    semantic_pre = correct_format_inferred_correct_semantic/correct_format_inferred_semantic if correct_format_inferred_semantic != 0 else 0
+    semantic_rec = correct_format_inferred_correct_semantic/correct_format if correct_format != 0 else 0
 
 
     return semantic_pre, semantic_rec
@@ -58,7 +58,7 @@ def metrix_Cal_Func(msg_semanticTruth, msg_Res, msg_fields, msg_len, msg_fieldTr
     print(f"correct_format_inferred_correct_semantic:{correct_format_inferred_correct_semantic}")
     print(f"\ncorrect_format_inferred_semantic:{correct_format_inferred_semantic}")
     print(f"correct_format:{correct_format}")
-    semantic_pre = correct_format_inferred_correct_semantic/correct_format_inferred_semantic
+    semantic_pre = correct_format_inferred_correct_semantic/correct_format_inferred_semantic if correct_format_inferred_semantic != 0 else 0
     if correct_format == 0:
         semantic_rec = 0
     else:

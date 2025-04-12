@@ -183,7 +183,7 @@ def Type_Validation(Command_field, Command_size,message_Result, v):
         # calculate entropies for each field in the message{index}
         fields_entropies = [calculate_shannon_entropy(field) for field in fields_value_set]
         print(f"fields_entropies:{fields_entropies}")
-        median_value = statistics.median(fields_entropies)
+        median_value = statistics.median(fields_entropies) if len(fields_entropies) > 0 else 0
 
         fields_entropies = list(zip(message_Result[index].fields, fields_entropies))
 
