@@ -17,7 +17,6 @@ _eip_common_fields = [
     ...,  # Item Data 1
     ...,  # Item Data 2
     ### CIP ###
-    Field.integer(2),  # Number of Services
     ...,  # Service Packets
 ]
 
@@ -44,7 +43,7 @@ class EIPPayload:
     @classmethod
     def connection_manager(cls) -> Tuple[List[Field], List[Field], List[Field]]:
         return (
-            EIPItem.CONNECTED_ADDR.to_fields(),
-            EIPItem.CONNECTED_DATA.to_fields(),
+            EIPItem.NULL.to_fields(),
+            EIPItem.UNCONNECTED_DATA.to_fields(),
             CIPItem.connection_manager(),
         )

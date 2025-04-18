@@ -94,8 +94,7 @@ for i, v in enumerate(_vlens):
         _vfields[i] = [_mirai_target_fields[::] * 2]
     else:
         _vfields[i] = [_mirai_target_fields[::]]
-    if v:
-        _vfields[i] += [_mirai_option_fields[::] * len(v)]
+    _vfields[i] += [_mirai_option_fields[::] * len(v)]
 
 _mirai_gt = {
     i: Packet(*f).parse(_vlens[i], *_vfields.get(i, []))

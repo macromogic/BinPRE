@@ -4,7 +4,6 @@ from .modbus import modbus_commandOffset
 from .modbus import modbus_lengthOffset
 from .modbus import modbus_Semantic_Functions_Groundtruth
 from .eip import *
-from .smb2 import *
 from .dns import *
 from .dnp3 import *
 from .http import *

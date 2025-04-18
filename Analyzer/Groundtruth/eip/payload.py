@@ -2,6 +2,15 @@ from ..common import Field
 from enum import Enum
 from typing import List
 
+_cip_request_common_fields = [
+    Field.integer(1),  # Service Code
+    Field.length(1),  # Request Path Size
+    Field.integer(1),  # Request Path #1 Flag
+    Field.integer(1),  # Request Path #1 Class
+    Field.integer(1),  # Request Path #2 Flag
+    Field.integer(1),  # Request Path #2 Instance
+    Field.integer(2),  # Number of Services
+]
 
 _cip_offset_field = [Field.integer(2)]
 
@@ -52,7 +61,7 @@ class EIPItem(Enum):
     def to_fields(self) -> List[Field]:
         match self:
             case self.NULL:
-                return [Field.integer(2)]
+                return [Field.integer(2), Field.integer(2)]
             case self.CONNECTED_ADDR:
                 return [Field.integer(2), Field.integer(2), Field.integer(4)]
             case self.CONNECTED_DATA:
@@ -65,7 +74,7 @@ class EIPItem(Enum):
 class CIPItem:
     @classmethod
     def request(cls, n: int) -> List[Field]:
-        return _cip_offset_field * n + _cip_service_fields_4c * n
+        return _cip_request_common_fields + _cip_offset_field * n + _cip_service_fields_4c * n
 
     @classmethod
     def request_path(cls, n: int, *length: int) -> List[Field]:
@@ -75,7 +84,7 @@ class CIPItem:
             fields = _cip_service_fields_4e.copy()
             fields[-2] = Field.string(length[i])
             service_fields.extend(fields)
-        return offset_fields + service_fields
+        return _cip_request_common_fields + offset_fields + service_fields
 
     @classmethod
     def connection_manager(cls) -> List[Field]:

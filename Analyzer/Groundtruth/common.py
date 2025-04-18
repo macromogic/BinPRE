@@ -24,9 +24,11 @@ class Field:
     typ: Optional[SemanticType]
     fun: Optional[SemanticFunction]
 
-    def position(self, offset: int) -> str:
+    def position(self, offset: int, width: Optional[int] = None) -> str:
+        if width is None:
+            width = self.width
         start_offset = offset + 1
-        end_offset = offset + self.width
+        end_offset = offset + width
         if start_offset != end_offset:
             return f'{start_offset},{end_offset}'
         return str(start_offset)
@@ -121,22 +123,23 @@ def _parse_packet_impl(
         vlen = []
     for field in fields:
         if field is Ellipsis:
-            vfs = vfields[0]
+            vfs = vfields.pop(0)
             syn, sem, fn = _parse_packet_impl(
                 vfs,
                 last_offset,
                 vlen[vi:],
-                vfields[1:]
+                vfields
             )
             syntax += syn
             semantic.update(sem)
             functions.update(fn)
+            last_offset = syntax[-1]
         else:
             if field.width == 0:
-                field.width = vlen[vi]
+                key = field.position(last_offset, vlen[vi])
                 vi += 1
-
-            key = field.position(last_offset)
+            else:
+                key = field.position(last_offset)
             end_offset = int(key.split(',')[-1])
             syntax.append(end_offset)
             if field.typ:
@@ -165,7 +168,7 @@ class Packet:
         ) = _parse_packet_impl(
             self.fields,
             vlen=vlen or [],
-            vfields=vfields
+            vfields=list(vfields)
         )
 
         return [-1] + syntax, semantic, functions
