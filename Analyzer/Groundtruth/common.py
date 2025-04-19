@@ -87,7 +87,7 @@ class Field:
     @classmethod
     def checksum(cls, length: int) -> 'Field':
         return cls(length,
-                   SemanticType.Static,
+                   SemanticType.Integer,
                    SemanticFunction.CheckSum)
 
     @classmethod
@@ -105,7 +105,7 @@ class Field:
     @classmethod
     def command(cls, length: int) -> 'Field':
         return cls(length,
-                   SemanticType.Static,
+                   SemanticType.Group,
                    SemanticFunction.Command)
 
 
