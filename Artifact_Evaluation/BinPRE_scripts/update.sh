@@ -18,6 +18,7 @@ case ${1:-} in
         echo "  --pull|-p:           Pull the latest changes from the repository"
         echo "  --testhook|-t:       Build with -DTESTHOOK"
         echo "  --verbose-debug|-d:  Build with -DBINPRE_DEBUG"
+        exit 1
         ;;
 esac
 

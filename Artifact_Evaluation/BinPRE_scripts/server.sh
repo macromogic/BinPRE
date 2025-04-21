@@ -17,6 +17,8 @@ case ${1:-} in
         ./run run taint $BINPRE_DNP3_SERVER
         ;;
     dns)
+        killall $BINPRE_DNS_SERVER
+        sleep 1
         ./run run taint $BINPRE_DNS_SERVER -C /BinPRE/testdata/dnsmasq.conf -d -i lo
         ;;
     eip)
@@ -27,5 +29,6 @@ case ${1:-} in
         ;;
     *)
         echo "Usage: $0 [modbus|http|tftp|dnp3|dns|eip|mirai]"
+        exit 1
         ;;
 esac
