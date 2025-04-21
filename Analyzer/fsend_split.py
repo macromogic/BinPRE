@@ -481,6 +481,19 @@ def MonitorAnalysis(index: int, payload_message:list):
         print(f"message_Result:{message_Result[0].field_types}")
         print(f"Pre_message_Result:{Pre_message_Result[0].field_types}")
 
+        print("{} save re_message_result and message_result".format(config.protocol_name))
+        for i in range(index):
+            print(f"index: {i}")
+            print(f"payload_message: {Pre_message_Result[i].payload}")
+            print(f"fields: {Pre_message_Result[i].fields}")
+            print(f"boundaries: {Pre_message_Result[i].boundaries}")
+            print(f"field_Types: {Pre_message_Result[i].field_types}")
+            print(f"field_Functions: {Pre_message_Result[i].field_funcs}")
+            print(f"refined field_Types: {message_Result[i].field_types}")
+            print(f"refined field_Functions: {message_Result[i].field_funcs}")
+            print("\n")
+        print("saved")
+
         
         '''Evaluation & Results Printing -- BinPRE'''
         

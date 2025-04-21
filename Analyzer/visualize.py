@@ -89,6 +89,7 @@ def main():
         n = len(payload)
         syn = syntax_gt[i][::]
         print(f"Syntax GT: {syn}, Length: {len(payload)}")
+        print(f"Semantic GT: {semantic_gt[i]}")
         assert syn[0] == -1, "First element of syntax_gt should be -1"
         assert syn[-1]+1 == len(payload), f"Length mismatch in syntax_gt: {syn[-1]+1} != {len(payload)}"
         sem = process_semantic(n, semantic_gt[i], semantic_functions_gt[i])
@@ -98,9 +99,6 @@ def main():
         for j in range(0, n, 16):
             s = payload[j:j+16]
             m = len(s)
-            # hexa = ' ' + ' '.join([f"{c:02x}" for c in s]) + ' '
-            # sema = ' ' + ' '.join([f"{sem[j+k]}" for k in range(m)]) + ' '
-            # text = ''.join([chr(c) if 32 <= c < 127 else '.' for c in s])
             boundary = [' ' for _ in range(m)]
             while bi < j+m:
                 if bi >= 0:
