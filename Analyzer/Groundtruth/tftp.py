@@ -11,11 +11,17 @@ __all__ = [
 _tftp_common_fields = [
     Field.command(2),  # opcode
     Field.filename(0),  # filename
-    Field.string(6),  # type: octet
+    Field.delim(1),
+    Field.string(5),  # type: octet
+    Field.delim(1),
     Field.string(0),  # option name 1
+    Field.delim(1),
     Field.string(0),  # option value 1
+    Field.delim(1),
     Field.string(0),  # option name 2
+    Field.delim(1),
     Field.string(0),  # option value 2
+    Field.delim(1),
 ]
 
 _tftp_string_fields = [
@@ -38,7 +44,7 @@ _tftp_string_fields = [
 ]
 
 _tftp_gt = {
-    i: Packet(*_tftp_common_fields).parse(list(map(lambda s: len(s)+1, sf)))
+    i: Packet(*_tftp_common_fields).parse(list(map(lambda s: len(s), sf)))
     for i, sf in enumerate(_tftp_string_fields)
 }
 
