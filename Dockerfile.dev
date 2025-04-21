@@ -7,3 +7,5 @@ git checkout dev
 git pull
 ./run compile taint
 EOR
+
+WORKDIR /BinPRE/Artifact_Evaluation/BinPRE_scripts

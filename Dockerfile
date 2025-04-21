@@ -113,3 +113,5 @@ service mariadb start
 mysql -uroot < ../scripts/db.sql
 EOR
 ENV BINPRE_MIRAI_SERVER=/Mirai-Source-Code/mirai/debug/mirai.dbg
+
+WORKDIR /BinPRE/Artifact_Evaluation/BinPRE_scripts
