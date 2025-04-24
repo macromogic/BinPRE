@@ -7,13 +7,17 @@ cd $BINPRE_PATH/Analyzer
 PROTO=${1:-}
 BASELINE_MODE=${2:-oa}
 EVAL_MODE=index
+TEXT_MODE=0
 ENDIAN=big
 
 case $PROTO in
     modbus)
         EVAL_MODE=xx
         ;;
-    http|dns)
+    s7|dns)
+        ;;
+    ftp|http)
+        TEXT_MODE=1
         ;;
     tftp)
         export SET_TIMEOUT=10
@@ -26,9 +30,9 @@ case $PROTO in
         netstat -tuln | grep '0.0.0.0:55' || /dnsmasq/src/dnsmasq -C /dnsmasq.conf -i lo -p 55
         ;;
     *)
-        echo "Usage: $0 [modbus|http|tftp|dnp3|dns|eip|mirai]"
+        echo "Usage: $0 [modbus|s7|ftp|http|tftp|dnp3|dns|eip|mirai]"
         exit 1
         ;;
 esac
 
-echo 0 | python3 fsend_split.py $PROTO 0 0 $BASELINE_MODE $EVAL_MODE $ENDIAN 0
+echo 0 | python3 fsend_split.py $PROTO 0 $TEXT_MODE $BASELINE_MODE $EVAL_MODE $ENDIAN 0

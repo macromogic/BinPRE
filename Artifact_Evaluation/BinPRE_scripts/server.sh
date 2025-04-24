@@ -7,6 +7,12 @@ case ${1:-} in
     modbus)
         ./run run taint ./freemodbus/tcpmodbus
         ;;
+    s7)
+        ./run run taint ./s7/examples/cpp/x86_64-linux/server
+        ;;
+    ftp)
+        ./run run taint ./ftp/Source/Release/fftp ./ftp/Bin/fftp.conf
+        ;;
     http)
         ./run run taint $BINPRE_HTTP_SERVER -r /BinPRE/testdata/http/
         ;;
@@ -28,7 +34,7 @@ case ${1:-} in
         ./run run taint $BINPRE_MIRAI_SERVER
         ;;
     *)
-        echo "Usage: $0 [modbus|http|tftp|dnp3|dns|eip|mirai]"
+        echo "Usage: $0 [modbus|s7|ftp|http|tftp|dnp3|dns|eip|mirai]"
         exit 1
         ;;
 esac

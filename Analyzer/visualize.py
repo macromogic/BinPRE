@@ -59,14 +59,16 @@ def get_pcap_data(protocol):
 
 
 def process_semantic(n, semantic_gt, function_gt):
-    sem = {i: ['-', '-'] for i in range(n)}
+    sem = {i: [' ', ' '] for i in range(n)}
     for k, v in semantic_gt.items():
         idxs = list(map(int, k.split(',')))
         for i in range(idxs[0], idxs[-1]+1):
+            assert sem[i][0] == ' ', f"Semantic GT conflict at index {i}"
             sem[i][0] = SEM_LABELS[v]
     for k, v in function_gt.items():
         idxs = list(map(int, k.split(',')))
         for i in range(idxs[0], idxs[-1]+1):
+            assert sem[i][1] == ' ', f"Function GT conflict at index {i}"
             sem[i][1] = FN_LABELS[v]
     return {k: ''.join(v) for k, v in sem.items()}
 
