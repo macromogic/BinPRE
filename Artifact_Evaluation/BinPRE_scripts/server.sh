@@ -8,6 +8,7 @@ case ${1:-} in
         ./run run taint ./freemodbus/tcpmodbus
         ;;
     s7)
+        export LD_LIBRARY_PATH=$PWD/s7/release/Linux/X86_64/glibc_2.21:$LD_LIBRARY_PATH
         ./run run taint ./s7/examples/cpp/x86_64-linux/server
         ;;
     ftp)
