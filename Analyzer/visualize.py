@@ -113,9 +113,10 @@ def main():
             sema = [f"{sem[j+k]}" for k in range(m)]
             hexa = "".join((a or "") + (b or "") for a, b in zip(hexa, boundary))
             sema = "".join((a or "") + (b or "") for a, b in zip(sema, boundary))
-            text = ''.join([chr(c) if 32 <= c < 127 else '.' for c in s])
+            text = "".join([chr(c) if 32 <= c < 127 else "." for c in s])
+            bnda = "".join(boundary).replace('|', '^')
             print(f"{hexa:<50} {text}")
-            print(f"{sema:<50}")
+            print(f"{sema:<50} {bnda}")
         print()
 
 
