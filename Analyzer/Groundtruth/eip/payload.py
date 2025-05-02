@@ -3,7 +3,7 @@ from enum import Enum
 from typing import List
 
 _cip_request_common_fields = [
-    Field.integer(1),  # Service Code
+    Field.command(1),  # Service Code
     Field.length(1),  # Request Path Size
     # Field.integer(1),  # Request Path #1 Flag
     # Field.integer(1),  # Request Path #1 Class
@@ -13,10 +13,10 @@ _cip_request_common_fields = [
     Field.integer(2),  # Number of Services
 ]
 
-_cip_offset_field = [Field.integer(2)]
+_cip_offset_field = [Field.unknown(2)]
 
 _cip_service_fields_4c = [
-    Field.integer(1),  # Service Code
+    Field.command(1),  # Service Code
     Field.length(1),  # Request Path Size
     # Field.integer(1),  # Request Path #1 Flag
     # Field.integer(1),  # Request Path #1 Class
@@ -27,8 +27,8 @@ _cip_service_fields_4c = [
 ]
 
 _cip_service_fields_4e = [
-    Field.integer(1),  # Service Code
-    Field.length(1),  # Request Pathyy Size
+    Field.command(1),  # Service Code
+    Field.length(1),  # Request Path Size
     Field.integer(1),  # Request Path Flag
     Field.length(1),  # Request Path Length
     Field.string(0),  # Request Path
@@ -36,7 +36,7 @@ _cip_service_fields_4e = [
 ]
 
 _cip_cm_fields = [
-    Field.integer(1),  # Service Code
+    Field.command(1),  # Service Code
     Field.unknown(5),
     Field.integer(1),  # Tick Flags
     Field.integer(1),  # Tick Count
