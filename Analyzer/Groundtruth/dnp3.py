@@ -9,22 +9,25 @@ __all__ = [
 ]
 
 _dnp3_common_fields = [
+    ### Link Header ###
     Field.static(2),  # Start bytes
     Field.length(1),  # Length
-    Field.integer(1),  # Control
+    Field.unknown(1),  # Control
     Field.integer(2),  # Destination
     Field.integer(2),  # Source
     Field.checksum(2),  # Data link header checksum
-    Field.integer(1),  # Transport control
-    Field.integer(1),  # Application control
+    ### Transport Header ###
+    Field.unknown(1),  # Transport control
+    ### Application Header ###
+    Field.unknown(1),  # Application control
     Field.command(1),  # Function code
+    ### Application Data ###
     ...,
     Field.checksum(2),  # Application data checksum
 ]
 
 _dnp3_payload_fields = [
-    Field.integer(1),  # Object number
-    Field.integer(1),  # Variable index
+    Field.unknown(2),  # Object type
     Field.integer(1),  # Qualifier
 ]
 

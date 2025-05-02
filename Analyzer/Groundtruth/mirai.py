@@ -15,7 +15,7 @@ _mirai_fields = [
         Field.command(1),  # Type
         Field.length(1),  # Target count
         ...,  # Targets
-        Field.length(1),  # Opt count
+        Field.integer(1),  # Opt count
         ...,  # Options
     ] for _ in range(50)
 ]
@@ -26,7 +26,7 @@ _mirai_target_fields = [
 ]
 
 _mirai_option_fields = [
-    Field.integer(1),  # Option ID
+    Field.group(1),  # Option ID
     Field.length(1),  # Option length
     Field.string(0),  # Option value
 ]
