@@ -81,7 +81,7 @@ class Field:
     @classmethod
     def delim(cls, length: int) -> 'Field':
         return cls(length,
-                   SemanticType.Static,
+                   None, # SemanticType.Static,
                    SemanticFunction.Delim)
 
     @classmethod
@@ -144,8 +144,8 @@ def _parse_packet_impl(
             syntax.append(end_offset)
             if field.typ:
                 semantic[key] = field.typ
-                if field.fun:
-                    functions[key] = field.fun
+            if field.fun:
+                functions[key] = field.fun
             last_offset = end_offset
     return syntax, semantic, functions
 

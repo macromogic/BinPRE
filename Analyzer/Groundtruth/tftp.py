@@ -11,7 +11,7 @@ __all__ = [
 _tftp_common_fields = [
     Field.command(2),  # opcode
     Field.filename(0),  # filename
-    Field.string(6),  # type: octet
+    Field.unknown(6),  # type: octet
     Field.string(0),  # option name 1
     Field.string(0),  # option value 1
     Field.string(0),  # option name 2
