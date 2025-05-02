@@ -6,12 +6,12 @@ _eip_common_fields = [
     ### Encapsulation Header ###
     Field.command(2),  # Command
     Field.length(2),  # Length
-    Field.integer(4),  # Session Handle
+    Field.unknown(4),  # Session Handle
     Field.integer(4),  # Status
-    Field.integer(8),  # Sender Context
-    Field.integer(4),  # Options
+    Field.unknown(8),  # Sender Context
+    Field.static(4),  # Options
     ### Command Specific Data ###
-    Field.integer(4),  # Interface Handle
+    Field.group(4),  # Interface Handle
     Field.integer(2),  # Timeout
     Field.integer(2),  # Item Count
     ...,  # Item Data 1

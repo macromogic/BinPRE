@@ -5,10 +5,11 @@ from typing import List
 _cip_request_common_fields = [
     Field.integer(1),  # Service Code
     Field.length(1),  # Request Path Size
-    Field.integer(1),  # Request Path #1 Flag
-    Field.integer(1),  # Request Path #1 Class
-    Field.integer(1),  # Request Path #2 Flag
-    Field.integer(1),  # Request Path #2 Instance
+    # Field.integer(1),  # Request Path #1 Flag
+    # Field.integer(1),  # Request Path #1 Class
+    # Field.integer(1),  # Request Path #2 Flag
+    # Field.integer(1),  # Request Path #2 Instance
+    Field.bytes(4),
     Field.integer(2),  # Number of Services
 ]
 
@@ -17,10 +18,11 @@ _cip_offset_field = [Field.integer(2)]
 _cip_service_fields_4c = [
     Field.integer(1),  # Service Code
     Field.length(1),  # Request Path Size
-    Field.integer(1),  # Request Path #1 Flag
-    Field.integer(1),  # Request Path #1 Class
-    Field.integer(1),  # Request Path #2 Flag
-    Field.integer(1),  # Request Path #2 Instance
+    # Field.integer(1),  # Request Path #1 Flag
+    # Field.integer(1),  # Request Path #1 Class
+    # Field.integer(1),  # Request Path #2 Flag
+    # Field.integer(1),  # Request Path #2 Instance
+    Field.bytes(4),
     Field.bytes(6),  # Command Specific Data
 ]
 
@@ -41,10 +43,11 @@ _cip_cm_fields = [
     Field.length(2),  # Embedded Message Request Size
     Field.integer(1),  # Service Flag
     Field.length(1),  # Request Path Size
-    Field.integer(1),  # Request Path #1 Flag
-    Field.integer(1),  # Request Path #1 Class
-    Field.integer(1),  # Request Path #2 Flag
-    Field.integer(1),  # Request Path #2 Instance
+    # Field.integer(1),  # Request Path #1 Flag
+    # Field.integer(1),  # Request Path #1 Class
+    # Field.integer(1),  # Request Path #2 Flag
+    # Field.integer(1),  # Request Path #2 Instance
+    Field.bytes(4),
     Field.bytes(2),  # Command Specific Data
     Field.length(1),  # Route Path Size
     Field.static(1),  # Reserved
@@ -61,13 +64,13 @@ class EIPItem(Enum):
     def to_fields(self) -> List[Field]:
         match self:
             case self.NULL:
-                return [Field.integer(2), Field.integer(2)]
+                return [Field.group(2), Field.length(2)]
             case self.CONNECTED_ADDR:
-                return [Field.integer(2), Field.integer(2), Field.integer(4)]
+                return [Field.group(2), Field.length(2), Field.integer(4)]
             case self.CONNECTED_DATA:
-                return [Field.integer(2), Field.integer(2), Field.integer(2)]
+                return [Field.group(2), Field.length(2), Field.integer(2)]
             case self.UNCONNECTED_DATA:
-                return [Field.integer(2), Field.integer(2)]
+                return [Field.group(2), Field.length(2)]
             case _:
                 raise ValueError(f"Unknown item: {item}")
 
