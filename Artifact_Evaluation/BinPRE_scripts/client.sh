@@ -35,4 +35,4 @@ case $PROTO in
         ;;
 esac
 
-echo 0 | python3 -u fsend_split.py $PROTO 0 $TEXT_MODE $BASELINE_MODE $EVAL_MODE $ENDIAN 0
+echo 1 | python3 -u fsend_split.py $PROTO 0 $TEXT_MODE $BASELINE_MODE $EVAL_MODE $ENDIAN 0
