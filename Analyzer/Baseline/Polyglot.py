@@ -115,7 +115,7 @@ def Polyglot_Res(polyglot_variables, polyglot_results_update, sizeofTaint, Resul
 def FormatPrint_FLAT_Polyglot(sizeofTaint, Result_Format,result_dir):
 
     if not Result_Format:
-        return
+        return []
     config.write_to_file(result_dir,"sizeofTaint: {}".format(sizeofTaint))
     config.write_to_file(result_dir," ")
     config.write_to_file(result_dir,"Format_[FLAT: polyglot]")
