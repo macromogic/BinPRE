@@ -237,6 +237,7 @@ def SendInputMsg():
         print(payload_message)
 
     config.baseline_mode = baseline_mode
+    msg_limit = int(os.environ.get('MSG_LIMIT', -1))
     
     if manual_flag == 0 or manual_flag == 1:
         # time.sleep(5)
@@ -244,6 +245,9 @@ def SendInputMsg():
         index = 0
         
         while 1:
+            if msg_limit > 0 and index >= msg_limit:
+                print("\033[33;1mReached message limit\033[0m")
+                break
             print("\033[32;1mindex: {}\033[0m".format(index))
             try:
                 d = payload_message[index] #
