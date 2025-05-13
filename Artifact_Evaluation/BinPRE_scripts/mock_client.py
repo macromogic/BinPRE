@@ -35,6 +35,12 @@ class Config:
                 return cls(host=host, port=44818)
             case 'mirai':
                 return cls(host=host, port=43608, bind_port=23)
+            case 'dnp3':
+                return cls(host=host, port=20000)
+            case 's7':
+                return cls(host=host, port=102)
+            case 'ftp':
+                return cls(host=host, port=21)
             case _:
                 raise ValueError(f"Unknown protocol: {protocol}")
 
@@ -104,6 +110,7 @@ def main():
     parser.add_argument('--num-retries', '-r', type=int, default=10)
     parser.add_argument('--verbose-limit', '-l', type=int, default=256)
     parser.add_argument('--no-response', '-nore', action='store_true')
+    parser.add_argument('--dump', '-d', type=argparse.FileType('w'), default=None)
     args = parser.parse_args()
 
     protocol = args.protocol.lower()
@@ -115,6 +122,10 @@ def main():
         config.port = args.port
 
     payloads = get_payload(pcap_path, config.port, config.udp, args.num_requests)
+    if fdump := args.dump:
+        for payload in payloads:
+            fdump.write(payload.hex().upper() + '\n')
+        return
     sock = connect(config.ip_port, config.udp, bind_port=config.bind_port, timeout=args.timeout)
     for i, payload in enumerate(payloads, 1):
         print(f"Sending payload {i}/{len(payloads)} of size {len(payload)}:\n{hexdump(payload, args.verbose_limit)}")

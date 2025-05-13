@@ -35,6 +35,11 @@ RUN pip install -r /BinPRE/requirements.txt
 RUN cd /BinPRE/src && ./run compile taint
 RUN mkdir -p /pcaps
 
+## BinaryInferno
+
+RUN git clone https://github.com/binaryinferno/binaryinferno.git
+ENV BINARYINFERNO_PATH="/binaryinferno"
+
 ## EIP
 
 RUN git clone https://github.com/EIPStackGroup/OpENer.git
