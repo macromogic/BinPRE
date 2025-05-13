@@ -78,7 +78,6 @@ def get_payload(pcap_path, port, udp, num_requests):
             payloads.append(payload)
     if num_requests > 0:
         payloads = payloads[:num_requests]
-    print(f"Loaded {len(payloads)} payloads from {pcap_path}")
     return payloads
 
 
@@ -126,6 +125,7 @@ def main():
         for payload in payloads:
             fdump.write(payload.hex().upper() + '\n')
         return
+    print(f"Loaded {len(payloads)} payloads from {pcap_path}")
     sock = connect(config.ip_port, config.udp, bind_port=config.bind_port, timeout=args.timeout)
     for i, payload in enumerate(payloads, 1):
         print(f"Sending payload {i}/{len(payloads)} of size {len(payload)}:\n{hexdump(payload, args.verbose_limit)}")
