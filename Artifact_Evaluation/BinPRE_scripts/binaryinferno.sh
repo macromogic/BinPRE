@@ -21,5 +21,5 @@ case $PROTO in
 esac
 
 cd $BINARYINFERNO_PATH/binaryinferno
-python3 $SCRIPTS_PATH/mock_client.py $PROTO -d - | python3 blackboard.py --detector $DETECTOR > $PROTO.log 2> >(tee $PROTO.err)
+python3 $SCRIPTS_PATH/mock_client.py $PROTO -d - | python3 blackboard.py --detector $DETECTOR > $PROTO.log 2> >(tee $PROTO.err >&2)
 awk '/INFERRED DESCRIPTION/,/SPECEND/' $PROTO.log
