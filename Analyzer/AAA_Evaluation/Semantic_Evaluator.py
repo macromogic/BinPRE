@@ -1044,6 +1044,17 @@ def Polyglot_SemanticEvaluator(payload_message, Polyglot_length_Res, Polyglot_co
         file.write(f"\n\Polyglot_Delim_pre:{Polyglot_Delim_pre}\n")
         file.write(f"Polyglot_Delim_rec:{Polyglot_Delim_rec}\n")
         file.write(f"Polyglot_Delim_F1:{Polyglot_Delim_F1}\n")
+    print(f"\n\n\nPolyglot_Command_pre:{Polyglot_Command_pre}\n")
+    print(f"Polyglot_Command_rec:{Polyglot_Command_rec}\n")
+    print(f"Polyglot_Command_F1:{Polyglot_Command_F1}\n")
+
+    print(f"\n\nPolyglot_Tupni_Length_pre:{Polyglot_Length_pre}\n")
+    print(f"Polyglot_Tupni_Length_rec:{Polyglot_Length_rec}\n")
+    print(f"Polyglot_Tupni_Length_F1:{Polyglot_Length_F1}\n")
+
+    print(f"\n\Polyglot_Delim_pre:{Polyglot_Delim_pre}\n")
+    print(f"Polyglot_Delim_rec:{Polyglot_Delim_rec}\n")
+    print(f"Polyglot_Delim_F1:{Polyglot_Delim_F1}\n")
 
 
 

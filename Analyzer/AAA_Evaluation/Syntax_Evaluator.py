@@ -272,6 +272,15 @@ def PolyglotEvaluator(payload_message,Polyglot_Syntax,commandOffset):
         file.write(f"******************\n")
         file.write(f"Under_Seg:{Under_Seg}\n")
         file.write(f"Over_Seg:{Over_Seg}\n")
+    print("\n\n\nEvaluation Part For Polyglot_Syntax---------------------------------\n")
+    print(f"Average_Accr:{Average_Accr}\n")
+    print(f"Average_Pre:{Average_Pre}\n")
+    print(f"Average_Rec:{Average_Rec}\n")
+    print(f"F1_score:{F1_score}\n")
+    print(f"Average_Perf:{Average_Perf}\n")
+    print(f"******************\n")
+    print(f"Under_Seg:{Under_Seg}\n")
+    print(f"Over_Seg:{Over_Seg}\n")
 
 
 
@@ -338,6 +347,15 @@ def AutoFormatEvaluator(payload_message,commandOffset,AutoFormat_ftrees):
         file.write(f"******************\n")
         file.write(f"Under_Seg:{Under_Seg}\n")
         file.write(f"Over_Seg:{Over_Seg}\n")
+    print("\n\n\nEvaluation Part For AutoFormat_Syntax---------------------------------\n")
+    print(f"Average_Accr:{Average_Accr}\n")
+    print(f"Average_Pre:{Average_Pre}\n")
+    print(f"Average_Rec:{Average_Rec}\n")
+    print(f"F1_score:{F1_score}\n")
+    print(f"Average_Perf:{Average_Perf}\n")
+    print(f"******************\n")
+    print(f"Under_Seg:{Under_Seg}\n")
+    print(f"Over_Seg:{Over_Seg}\n")
 
     return Autoformat_syntaxRes
 
@@ -400,4 +418,13 @@ def TupniEvaluator(payload_message,Tupni_Syntax,commandOffset):
         file.write(f"******************\n")
         file.write(f"Under_Seg:{Under_Seg}\n")
         file.write(f"Over_Seg:{Over_Seg}\n")
+    print("\n\n\nEvaluation Part For Tupni_Syntax---------------------------------\n")
+    print(f"Average_Accr:{Average_Accr}\n")
+    print(f"Average_Pre:{Average_Pre}\n")
+    print(f"Average_Rec:{Average_Rec}\n")
+    print(f"F1_score:{F1_score}\n")
+    print(f"Average_Perf:{Average_Perf}\n")
+    print(f"******************\n")
+    print(f"Under_Seg:{Under_Seg}\n")
+    print(f"Over_Seg:{Over_Seg}\n")
 
