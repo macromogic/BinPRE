@@ -115,7 +115,8 @@ def Print_bo_Res(payload_message, Polyglot_Syntax, Polyglot_length_Res, Polyglot
 
 
             file.write(f"\nAutoFormat Syntax----------------------\n")
-            file.write(f"{AutoFormat_ftrees[i]}\n")
+            # file.write(f"{AutoFormat_ftrees[i]}\n")
+            file.write(f"{list(AutoFormat_ftrees[i])}\n")
 
             file.write(f"\nTupni Syntax----------------------\n")
             file.write(f"{Tupni_Syntax[i]}\n")
@@ -488,7 +489,9 @@ def MonitorAnalysis(index: int, payload_message:list):
         print("{} save re_message_result and message_result".format(config.protocol_name))
         for i in range(index):
             print(f"index: {i}")
-            print(f"payload_message: {Pre_message_Result[i].payload}")
+            # print(f"payload_message: {Pre_message_Result[i].payload}")
+            payload = ' '.join([f'{byte:02x}' for byte in Pre_message_Result[i].payload])
+            print(f"payload_message: {payload}")
             print(f"fields: {Pre_message_Result[i].fields}")
             print(f"boundaries: {Pre_message_Result[i].boundaries}")
             print(f"field_Types: {Pre_message_Result[i].field_types}")

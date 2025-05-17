@@ -66,6 +66,7 @@ def metrix_Cal(msg_syntaxTruth,msg_syntaxRes,msg_len):
     msg_accr = correct_boundary_number/(msg_len+1)
     msg_pre = inferred_true_field_coundary_number/len(msg_syntaxRes)
     msg_rec = inferred_true_field_coundary_number/len(msg_syntaxTruth)
+    print("crt bnd # = {}\tinferred true bnd # ={}".format(correct_boundary_number,inferred_true_field_coundary_number))
 
     perfect_inferred = 0
     msg_syntaxTruth = sorted(list(msg_syntaxTruth))
