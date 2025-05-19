@@ -1,0 +1,44 @@
+diff --git a/binaryinferno/blackboard.py b/binaryinferno/blackboard.py
+index 47c9142..01f1550 100644
+--- a/binaryinferno/blackboard.py
++++ b/binaryinferno/blackboard.py
+@@ -555,9 +555,38 @@ def onejob(foo):
+         return ["FieldRep " +cleanup_repeated_fields(f.annotation)+ " (" + f.annotation+ ")"]
+     #print("Final Sigma",unknownify(s,foo))
+     specres = []
+-    for f in unknownify(s,foo).fields:
++    new_sigma = unknownify(s,foo)
++    for f in new_sigma.fields:
+       specres+=field2spec(f,0)
+       #print("\t",f,f.ty(),f.width,f.annotation,)
++    print("#EVAL_INFO_START")
++    eval_info = {}
++    foo_msgs = msgs(foo)
++    for i in range(len(foo_msgs)):
++      syntax_result = [-1]
++      semantic_result = {}
++      function_result = {}
++      for field in new_sigma.fields:
++        interval = field.intervals[i]
++        if interval.start == interval.stop:
++          continue
++        syntax_result.append(interval.stop)
++        field_key = f"{interval.start},{interval.stop-1}"
++        if field.ty() == "L":
++          semantic_result[field_key] = "integer"
++          function_result[field_key] = "length"
++        elif field.ty() == "C":
++          semantic_result[field_key] = "static"
++        elif field.ty() == "X":
++          semantic_result[field_key] = "integer"
++          function_result[field_key] = "checksum"
++        eval_info[i] = {
++          "pred": syntax_result,
++          "types": semantic_result,
++          "fns": function_result,
++        }
++    print("result =", eval_info)
++    print("#EVAL_INFO_END")
+     print("SPECSTART")
+     print("\n".join(specres))
+     print("SPECEND")
