@@ -38,7 +38,7 @@ RUN mkdir -p /pcaps
 ## BinaryInferno
 
 RUN git clone https://github.com/binaryinferno/binaryinferno.git
-RUN cd /binaryinferno && git apply /BinPRE/binaryinferno.patch
+RUN cd /binaryinferno && git apply /BinPRE/testdata/binaryinferno.patch
 ENV BINARYINFERNO_PATH="/binaryinferno"
 
 ## EIP
