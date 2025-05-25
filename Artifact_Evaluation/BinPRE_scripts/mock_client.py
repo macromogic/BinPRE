@@ -137,9 +137,13 @@ def main():
         reason = f'max retries ({args.num_retries})'
         for _ in range(args.num_retries):
             try:
+                chunk_id = 1
                 if response := sock.recv(255):
                     # print(hexdump(response))
+                    print(f"Got chunk #{chunk_id} of size {len(response)}:\n{hexdump(response, 16)}")
                     while chunk := sock.recv(255):
+                        print(f"Got chunk #{chunk_id} of size {len(response)}:\n{hexdump(response, 16)}")
+                        chunk_id += 1
                         response += chunk
                         # print(hexdump(chunk))
                     break
