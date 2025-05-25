@@ -138,10 +138,10 @@ def main():
         for _ in range(args.num_retries):
             try:
                 if response := sock.recv(255):
-                    print(hexdump(response))
+                    # print(hexdump(response))
                     while chunk := sock.recv(255):
                         response += chunk
-                        print(hexdump(chunk))
+                        # print(hexdump(chunk))
                     break
             except socket.timeout:
                 reason = 'timeout'
