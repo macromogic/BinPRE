@@ -156,7 +156,7 @@ def main():
                 raise RuntimeError(f"No response received after {reason}")
         if config.needs_reconnect:
             sock.close()
-            sock = connect(config.ip_port, config.udp, args.timeout)
+            sock = connect(config.ip_port, config.udp, bind_port=config.bind_port, timeout=args.timeout)
     sock.close()
 
 
